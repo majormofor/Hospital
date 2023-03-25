@@ -1,3 +1,49 @@
+<?php
+require 'connection.php';
+session_start();
+
+if (isset($_POST['submit'])) {
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $dob = $_POST['dob'];
+    $maritalstatus = $_POST['maritalstatus'];
+    $address = $_POST['address'];
+    $nationality = $_POST['nationality'];
+    $confirmpassword = $_POST['confirmpassword'];
+
+    // Check if passwords match
+    if ($password != $confirmpassword) {
+        echo "<script> alert('Passwords do not match!');</script>";
+        exit;
+    }
+
+    // Check if email already exists
+    $stmt = $conn->prepare("SELECT * FROM patients WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        echo "<script> alert('Email already exists!');</script>";
+        exit;
+    }
+
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+    // Insert the new patient into the database
+    $stmt = $conn->prepare("INSERT INTO patients (firstname, lastname, password, email, dob, maritalstatus, address, nationality) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssss", $firstname, $lastname, $hashed_password, $email, $dob, $maritalstatus, $address, $nationality);
+    $stmt->execute();
+
+    // Redirect to login page
+    header('Location: login.php');
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -149,7 +195,7 @@
                     </div>
 
                     <div class="col-md-9">
-                        <input class="btn btn-primary" type="submit" name="signup" value="Sign Up">
+                        <input class="btn btn-primary" type="submit" name="submit" value="Sign Up">
                         <h7>Registered already? <a href="login.php">Login.</a></h7>
                     </div>
 </div> 

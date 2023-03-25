@@ -1,22 +1,41 @@
 <?php
-// Check if a confirmation message is present in the URL
-if (isset($_GET["msg"]) && $_GET["msg"] == "account_created") {
-    // Use Bootstrap alert to display confirmation message
-    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-              Your account has been created. Please login.
-              <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                <span aria-hidden='true'>&times;</span>
-              </button>
-          </div>";
+require 'connection.php';
+session_start();
+
+if (isset($_POST['submit'])) {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    // Prepare the SQL query
+    $stmt = $conn->prepare("SELECT * FROM patients WHERE email = ?");
+    $stmt->bind_param("s", $email);
+
+    // Execute the query
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['loggedIn'] = true;
+            $_SESSION['patient_id'] = $user['patient_id'];
+            header('Location: backend/patient.php');
+            exit;
+        } else {
+            echo "<script> alert('Invalid Email or Password!!');</script>";
+        }
+    } else {
+        echo "<script> alert('Invalid Email or Password!!');</script>";
+    }
 }
 ?>
 
+
+
+
+
  
  <!DOCTYPE html>
-
-
-
-
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -29,7 +48,7 @@ if (isset($_GET["msg"]) && $_GET["msg"] == "account_created") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 	
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="CSS/loginStyle.css ?v=<?php echo time();?>">
+    <link rel="stylesheet" href="assets/CSS/loginStyle.css ?v=<?php echo time();?>">
   </head>
   <body>
      <!-- Navbar starts -->
@@ -92,18 +111,21 @@ if (isset($_GET["msg"]) && $_GET["msg"] == "account_created") {
     <h4 class="text-center">Patient Login</h4>
   </div>
   <div class="card-body">
-    <form>
+    <form method = "post" action = "">
       <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <label>Email address</label>
+        <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password">
-        <label for="showPassword">
+        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
         <input type="checkbox" id="showPassword" onclick="togglePassword()"> Show Password
+        
       </div>
+      
+
+      <button type="submit" name = "submit" class="btn btn-primary btn-block">Login</button><br>
       <script>
           function togglePassword() {
             var passwordInput = document.getElementById("password");
@@ -115,17 +137,18 @@ if (isset($_GET["msg"]) && $_GET["msg"] == "account_created") {
             }
           }
       </script>
-      <button type="submit" class="btn btn-primary btn-block">Login</button><br>
-      <h6>Haven't Register? <a href="signup2.php">Sign Up</a></h6>
+      <h6>Haven't Register? <a href="signup.php">Sign Up</a></h6>
     </form>
   </div>
 </div>
 </div>
+        
+        
         <div class="col-md-2">
 
         </div>
         <div class="col-md-6">
-        <img src="images/patient.png" alt="You can do it" sizes="" srcset="">    
+        <img src="assets/images/patient.png" alt="You can do it" sizes="" srcset="">    
         </div>
        
       </div>
@@ -145,40 +168,3 @@ if (isset($_GET["msg"]) && $_GET["msg"] == "account_created") {
 
 </html>
 
-<?php
-// TODO: Replace with your database credentials
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database_name";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$email = $_POST["email"];
-	$password = $_POST["password"];
-
-	// TODO: Hash password for security
-	$hashed_password = md5($password);
-
-	$sql = "SELECT * FROM users WHERE email='$email' AND password='$hashed_password'";
-	$result = $conn->query($sql);
-
-	if ($result->num_rows > 0) {
-		// Authentication successful, redirect to dashboard or some other page
-		header("Location: patient.php");
-		exit();
-	} else {
-		// Authentication failed, show error message
-		echo "<p>Login failed. Please check your email and password and try again.</p>";
-	}
-}
-
-$conn->close();
-?>
