@@ -49,7 +49,18 @@ mysqli_close($conn);
 	<link rel="stylesheet" href="style.css ?v=<?php echo time();?>">
     <title>Welcome</title>
 </head>
-<body>
+        <body>
+        <!-- css style -->
+        <style>
+            .blac {
+            margin-top: 50px;
+            border: 2px solid #005EB8;
+                padding: 20px;
+                margin: 20px auto;
+                /* max-width: 800px; */
+            }
+
+</style>
      
     <!-- Navbar starts -->
  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -100,10 +111,9 @@ mysqli_close($conn);
         <!-- Navbar ends -->
 
    <main>
-            <a href="appointment.php">Book an Appointment</a>
 
 
-            <div class="container">
+            <div class="container blac">
                 <div class="row">
                     <div class="col-md-12">
                     <div class="d-flex align-items-start">
@@ -113,6 +123,7 @@ mysqli_close($conn);
                             <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
                             <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Book an Appointment</button>
                             <button class="nav-link" id="v-pills-appointment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-appointment" type="button" role="tab" aria-controls="v-pills-appointment" aria-selected="false">View Appointment</button>
+                            <button class="nav-link" id="v-pills-MedicalRecord-tab" data-bs-toggle="pill" data-bs-target="#v-pills-MedicalRecord" type="button" role="tab" aria-controls="v-MedicalRecord" aria-selected="false">Medical Test Records</button>
 
 
                         </div>
@@ -213,7 +224,99 @@ mysqli_close($conn);
                             </div>
                             </div>
 
-                            <div class="tab-pane fade" id="v-pills-settingsaa" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+
+                            <!-- Medical Test Record  start-->
+                           
+                            <div class="tab-pane fade" id="v-pills-MedicalRecord" role="tabpanel" aria-labelledby="v-pills-MedicalRecord-tab" tabindex="0">
+                            <div class="blac">
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false" disabled>Disabled</button>
+                                </li>
+                                </ul>
+                                <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                                <?php
+    
+    require '../connection.php';
+
+    // Get the patient ID from the session
+    $patient_id = $_SESSION['patient_id'];
+
+    // Prepare the SQL query to fetch the blood count results along with the staff name who conducted the test
+    $sql = "SELECT b.*, s.first_name, s.last_name FROM blood_count_test b 
+            JOIN staffs s ON b.staff_id = s.staff_id 
+            WHERE b.patient_id = $patient_id";
+
+    // Execute the query
+    $result = mysqli_query($conn, $sql);
+
+    // Check if the query was successful
+    if ($result) {
+        // Check if there are any results
+        if (mysqli_num_rows($result) > 0) {
+            // Display the results in a table
+            echo "<table class='table'>
+                    <thead>
+                        <tr>
+                            <th>Test Date</th>
+                            <th>Test Name</th>
+                            <th>Red Blood Cells</th>
+                            <th>White Blood Cells</th>
+                            <th>Platelet</th>
+                            <th>Hemoglobin</th>
+                            <th>Description</th>
+                            <th>Staff Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr>
+                        <td>" . $row['test_date'] . "</td>
+                        <td>" . $row['test_name'] . "</td>
+                        <td>" . $row['red_blood_cells'] . " x 10^6/ul</td>
+                        <td>" . $row['white_blood_cells'] . " x 10^3/ul</td>
+                        <td>" . $row['platelet'] . " x 10^3/ul</td>
+                        <td>" . $row['hemoglobin'] . " g/dl</td>
+                        <td>" . $row['description'] . "</td>
+                        <td>" . $row['first_name'] . " " . $row['last_name'] . "</td>
+                    </tr>";
+            }
+            echo "</tbody>
+                </table>";
+        } else {
+            // No results found
+            echo "No blood count results found for this patient.";
+        }
+    } else {
+        // Query execution failed
+        echo "Error: " . mysqli_error($conn);
+    }
+
+    // Close the database connection
+    mysqli_close($conn);
+?>
+                                </div>
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">...</div>
+                                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">...</div>
+                                <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab" tabindex="0">...</div>
+                                </div>
+
+
+
+                            </div>
+                            </div>
+                           <!-- Medical Test Record  End-->
+
                             <div class="tab-pane fade" id="v-pills-settingsaa" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
 
                         </div>

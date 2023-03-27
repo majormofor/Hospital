@@ -203,7 +203,12 @@ $result = mysqli_query($conn, $sql);
                             
                         <!-- Blood count test start -->
                             <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                            <div class="row">
+
+                            
+                            <div class="col-md-5">
                             <form method="post" action="process_blood_count.php">
+                                <h3>Blood Count Test Form</h3>
                                 <div class="form-group">
                                     <label for="test_date">Test Date:</label>
                                     <input type="date" class="form-control" id="test_date" name="test_date" required>
@@ -237,9 +242,14 @@ $result = mysqli_query($conn, $sql);
                                     <input type="number" class="form-control" id="patient_id" name="patient_id">
                                 </div>
                                 <input type="hidden" name="staff_id" value="<?php echo $_SESSION['staff_id']; ?>">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" name = "submit" class="btn btn-primary">Submit</button>
                                 </form> 
-
+                                </div>
+                            
+                            <div class="col-md-5">
+                                <img src="../assets/images/bloodcounttest.png" alt="test">
+                            </div>
+                            </div>
                             </div>
                             <!-- Blood count test ends -->
                             <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>

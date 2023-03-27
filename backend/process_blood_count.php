@@ -13,10 +13,10 @@
         $platelet = mysqli_real_escape_string($conn, $_POST['platelet']);
         $hemoglobin = mysqli_real_escape_string($conn, $_POST['hemoglobin']);
         $description = mysqli_real_escape_string($conn, $_POST['description']);
-        $patient_firstname = mysqli_real_escape_string($conn, $_POST['patient_firstname']);
+        $patient_id = mysqli_real_escape_string($conn, $_POST['patient_id']);
 
         // Get the patient ID using the first name
-        $sql = "SELECT patient_id FROM patients WHERE firstname = '$patient_firstname' LIMIT 1";
+        $sql = "SELECT patient_id FROM patients WHERE patient_id = '$patient_id' LIMIT 1";
         $result = mysqli_query($conn, $sql);
         if ($result && mysqli_num_rows($result) == 1) {
             $row = mysqli_fetch_assoc($result);
