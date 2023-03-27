@@ -165,6 +165,5 @@ if (isset($_POST['submit'])) {
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity >
 
 </body>
-
 </html>
 

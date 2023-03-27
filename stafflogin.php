@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
-
-
 <?php
-    require 'connection.php';
     session_start();
+    require 'connection.php';
 
     if (isset($_POST['submit'])) {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -23,6 +14,7 @@
 
         if ($result && mysqli_num_rows($result) == 1) {
             $user = mysqli_fetch_assoc($result);
+            $_SESSION['staff_id'] = $user['staff_id']; // moved this line
             if ($password == $user['password']) {
                 $_SESSION['loggedIn'] = true;
                 $_SESSION['user_id'] = $user['staff_id'];
@@ -39,7 +31,12 @@
     }
 ?>
 
- 
+
+
+
+
+
+
  <!DOCTYPE html>
 
 
@@ -174,40 +171,3 @@
 
 </html>
 
-<?php
-// TODO: Replace with your database credentials
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "your_database_name";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$email = $_POST["email"];
-	$password = $_POST["password"];
-
-	// TODO: Hash password for security
-	$hashed_password = md5($password);
-
-	$sql = "SELECT * FROM users WHERE email='$email' AND password='$hashed_password'";
-	$result = $conn->query($sql);
-
-	if ($result->num_rows > 0) {
-		// Authentication successful, redirect to dashboard or some other page
-		header("Location: patient.php");
-		exit();
-	} else {
-		// Authentication failed, show error message
-		echo "<p>Login failed. Please check your email and password and try again.</p>";
-	}
-}
-
-$conn->close();
-?>

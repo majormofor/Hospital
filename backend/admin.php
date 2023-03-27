@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,8 +42,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="Feedback.php">Patient Reviews</a>
                 </li>
+                <li class="nav-item">
+                <span class="badge text-bg-light">Welcome Mofor</span>
+                </li>
+                
 
       </ul>
+     
+      <form class="d-flex" role="search">
+      <a class="btn btn-primary" href="logout.php" role="button"><h6>Log Out</h6></a>
+      </form>
       
     </div>
   </div>
