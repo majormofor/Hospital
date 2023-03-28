@@ -194,21 +194,80 @@ $result = mysqli_query($conn, $sql);
                         
                         <div class="d-flex align-items-start">
                         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">BCT FORM</button>
-                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</button>
-                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
-                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+                        <button class="nav-link active" id="v-pills-set-tab" data-bs-toggle="pill" data-bs-target="#v-pills-set" type="button" role="tab" aria-controls="v-pills-set" aria-selected="false">Stool Test</button>
+
+                            <button class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">BCT FORM</button>
+                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Lipid Panel</button>
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Urinalysis Test</button>
+                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Stool Test</button>
+
                         </div>
                         <div class="tab-content" id="v-pills-tabContent">
+                     <!-- imaging start -->
+                        <div class="tab-pane fade show active" id="v-pills-set" role="tabpanel" aria-labelledby="v-pills-set-tab" tabindex="0">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="../assets/images/imaging.jpg" alt="Urine Image" height = "700px" width = "990px" >
+                                </div>
+                          <div class="col-md-8">
+                            <h1>Imaging Test Results</h1>
+                            <hr>
+                            <form action="imaging_test.php" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                <label for="test_date">Test Date</label>
+                                <input type="date" class="form-control" id="test_date" name="test_date" required>
+                                </div>
+                                <div class="form-group">
+                                <label for="test_name">Test Name</label>
+                                <input type="text" class="form-control" id="test_name" name="test_name" required>
+                                </div>
+                                <div class="form-group">
+                                <label for="image_type">Image Type</label>
+                                <select class="form-control" id="image_type" name="image_type" required>
+                                    <option value="" selected disabled>Select Image Type</option>
+                                    <option value="X-Ray">X-Ray</option>
+                                    <option value="MRI">MRI</option>
+                                    <option value="CT Scan">CT Scan</option>
+                                    <option value="Ultrasound">Ultrasound</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                <label for="file">Upload Image/Report</label>
+                                <input type="file" class="form-control-file" id="file" name="file" accept="image/*,.pdf,.doc,.docx,.txt">
+                                </div>
+                                <div class="form-group">
+                                <label for="patient_id">Patient ID</label>
+                                <input type="text" class="form-control" id="patient_id" name="patient_id" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                            </form>
+                        </div>
+                        </div>
                             
+                            </div>
+
+
+                        </div>
+                        <!-- imaging end -->
+
+
+
+
                         <!-- Blood count test start -->
-                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                            <div class="tab-pane fade " id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
                             <div class="row">
 
                             
                             <div class="col-md-5">
                             <form method="post" action="process_blood_count.php">
                                 <h3>Blood Count Test Form</h3>
+                                <hr>
                                 <div class="form-group">
                                     <label for="test_date">Test Date:</label>
                                     <input type="date" class="form-control" id="test_date" name="test_date" required>
@@ -252,9 +311,230 @@ $result = mysqli_query($conn, $sql);
                             </div>
                             </div>
                             <!-- Blood count test ends -->
-                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
-                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
-                            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+
+                            <!-- lipid panel test start -->
+                            
+                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                    <img src="../assets/images/lipid.jpg" alt="Lipid Panel Image" height = "850px">
+                                    </div>
+                                    <div class="col-md-8">
+                                    <h2>Lipid Panel Test</h2>
+                                    <hr>
+                                    <form method="POST" action="lipid_panel.php">
+                                    <div class="form-group">
+                                        <label for="lipid">Test Name</label>
+                                        <input type="text" class="form-control" id="" name="test_name" required>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="hdl_cholesterol">Test Date</label>
+                                        <input type="date" class="form-control" id="hdl_cholesterol" name="test_date" required>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="total_cholesterol">Total Cholesterol (mg/dL)</label>
+                                        <input type="number" class="form-control" id="total_cholesterol" name="total_cholesterol" required>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="hdl_cholesterol">HDL Cholesterol (mg/dL)</label>
+                                        <input type="number"  class="form-control" id="hdl_cholesterol" name="hdl_cholesterol" required>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="ldl_cholesterol">LDL Cholesterol (mg/dL)</label>
+                                        <input type="number" class="form-control" id="ldl_cholesterol" name="ldl_cholesterol" required>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="triglycerides">Triglycerides (mg/dL)</label>
+                                        <input type="number" class="form-control" id="triglycerides" name="triglycerides" required>
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="patient_id">Patient ID:</label>
+                                            <input type="number" class="form-control" id="patient_id" name="patient_id">
+                                        </div>
+                                                            
+                                        <input type="hidden" name="staff_id" value="<?php echo $_SESSION['staff_id']; ?>">
+                                        <button type="submit" name = "submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                    </div>
+                                </div>
+                                </div>
+
+                            </div>
+                            <!-- lipid panel test ends -->
+                            <!-- urinalysis Test start -->
+                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+                            
+                            <div class="container">
+                                <div class="row">
+                                <div class="col-md-2">
+                                    <img src="../assets/images/urine.jpg" alt="Urine Image" height = "1000px" width = "990px" >
+                                </div>
+                                    <div class="col-md-8">
+                                    <h2>Urinalysis Test</h2>
+                                    <hr>
+                            <form method="post" action="urinalysis.php">
+                                <div class="form-group">
+                                    <label for="test_date">Test Date:</label>
+                                    <input type="date" class="form-control" id="test_date" name="test_date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="test_name">Test Name:</label>
+                                    <input type="text" class="form-control" id="test_name" name="test_name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="patient_id">Patient ID:</label>
+                                    <input type="number" class="form-control" id="patient_id" name="patient_id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="color">Color:</label>
+                                    <input type="text" class="form-control" id="color" name="color" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ph">pH:</label>
+                                    <input type="text" class="form-control" id="ph" name="ph" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="glucose">Glucose:</label>
+                                    <input type="text" class="form-control" id="glucose" name="glucose" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ketones">Ketones:</label>
+                                    <input type="text" class="form-control" id="ketones" name="ketones" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="leukocytes">Leukocytes:</label>
+                                    <input type="text" class="form-control" id="leukocytes" name="leukocytes" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="protein">Protein:</label>
+                                    <input type="text" class="form-control" id="protein" name="protein" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                </div>
+                                <input type="hidden" name="staff_id" value="<?php echo $_SESSION['staff_id']; ?>">
+                                <button type="submit" name = "submit" class="btn btn-primary">Submit</button>
+                                </form>
+                                
+                                </div>
+                                </div>
+                                </div>
+                                
+
+                            </div>
+                            <!-- Stool Test start -->
+                            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
+                                <!-- HTML Form -->
+                                <div class="container">
+                                <div class="row">
+
+                                <div class="col-md-2">
+                                    <img src="../assets/images/stool.jpg" alt="Urine Image" height = "1200px" width = "990px" >
+                                </div>
+                                <div class="col-md-8 ">
+
+                                        <h4>Stool Test Form</h4>
+                                        <hr>
+                                        
+                                        <div class="card-body">
+                                        <form method="post" action="stool_test.php">
+                                            <div class="form-group">
+                                            <label for="patient_id">Patient ID</label>
+                                            <input type="text" class="form-control" id="patient_id" name="patient_id" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="test_name">Test Name</label>
+                                            <input type="text" class="form-control" id="test_name" name="test_name" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="test_date">Test Date</label>
+                                            <input type="date" class="form-control" id="test_date" name="test_date" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="appearance">Appearance</label>
+                                            <select class="form-control" id="appearance" name="appearance" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="Normal">Normal</option>
+                                                <option value="Abnormal">Abnormal</option>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="color">Color</label>
+                                            <select class="form-control" id="color" name="color" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="Normal">Normal</option>
+                                                <option value="Abnormal">Abnormal</option>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="pH">pH</label>
+                                            <input type="text" class="form-control" id="pH" name="pH" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="blood">Blood</label>
+                                            <select class="form-control" id="blood" name="blood" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="Negative">Negative</option>
+                                                <option value="Positive">Positive</option>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="nitrite">Nitrite</label>
+                                            <select class="form-control" id="nitrite" name="nitrite" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="Negative">Negative</option>
+                                                <option value="Positive">Positive</option>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="ova_parasites">Ova & Parasites</label>
+                                            <select class="form-control" id="ova_parasites" name="ova_parasites" required>
+                                                <option value="">-- Select --</option>
+                                                <option value="Negative">Negative</option>
+                                                <option value="Positive">Positive</option>
+                                            </select>
+                                            </div>
+                                            <div class="form-group">                                           
+                                                <label for="cdiff_toxin">C. difficile Toxin</label>
+                                                <select class="form-control" id="cdiff_toxin" name="cdiff_toxin" required>
+                                                    <option value="">Select one</option>
+                                                    <option value="Positive">Positive</option>
+                                                    <option value="Negative">Negative</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="calprotectin">Calprotectin</label>
+                                                <input type="text" class="form-control" id="calprotectin" name="calprotectin" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="description">Description</label>
+                                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+                                            </div>
+                                            </div>
+
+                            </div>
+                            <!-- Stool Test End -->
+                            <!-- imaging Test start -->
+                            <!-- <div class="tab-pane fade" id="v-pills-set" role="tabpanel" aria-labelledby="v-pills-set-tab" tabindex="0">
+                                hello
+
+                            </div> -->
+                             <!-- imaging Test start -->
+
+
                         </div>
                         </div>                     
 
