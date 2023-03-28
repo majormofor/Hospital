@@ -421,7 +421,9 @@ mysqli_close($conn);
                                                 <td><?php echo $row['test_name']; ?></td>
                                                 <td><?php echo $row['image_type']; ?></td>
                                                 <td><?php echo $row['description']; ?></td>
-                                                <td><img src="../uploads/<?php echo $row['file']; ?>" alt="Image"></td>
+                                                <td>
+                                                   <img src="../assets/uploads/<?php echo $row['file']; ?>" alt="Image" class="img-fluid" style="max-width: 400px;">
+                                                </td>
                                             </tr>
                                             <?php } ?>
                                         </tbody>

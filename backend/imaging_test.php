@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
             if ($fileError === 0) {
                 if ($fileSize < 5000000) {
                     $fileNameNew = uniqid('', true) . "." . $fileExt;
-                    $fileDestination = '../uploads/' . $fileNameNew;
+                    $fileDestination = '../assets/uploads/' . $fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
 
                     $sql = "INSERT INTO imaging (test_date, test_name, image_type, description, file, patient_id, staff_id) 
