@@ -10,12 +10,12 @@ $sql = "SELECT appointments.*, patients.firstname FROM appointments JOIN patient
 $result = mysqli_query($conn, $sql);
 
    
-                            if(!isset($_SESSION['staff_id'])) {
-                                header('Location: ../stafflogin.php');
-                                exit;
-                            }
+    if(!isset($_SESSION['staff_id'])) {
+        header('Location: ../stafflogin.php');
+        exit;
+    }
 
-                            $staff_id = $_SESSION['staff_id'];
+    $staff_id = $_SESSION['staff_id'];
 
 
 ?>
@@ -78,7 +78,7 @@ $result = mysqli_query($conn, $sql);
                  </ul>
 
                  <form class="d-flex" role="search">
-                     <a class="btn btn-primary" href="logout.php" role="button"><h6>Log Out</h6></a>
+                     <a class="btn btn-primary"href="logouts.php?staff_id=<?php echo $_SESSION['staff_id']; ?>"><h6>Log out</h6></a>
                   </form>
         
              </div>
@@ -194,7 +194,7 @@ $result = mysqli_query($conn, $sql);
                         
                         <div class="d-flex align-items-start">
                         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <button class="nav-link active" id="v-pills-set-tab" data-bs-toggle="pill" data-bs-target="#v-pills-set" type="button" role="tab" aria-controls="v-pills-set" aria-selected="false">Stool Test</button>
+                        <button class="nav-link active" id="v-pills-set-tab" data-bs-toggle="pill" data-bs-target="#v-pills-set" type="button" role="tab" aria-controls="v-pills-set" aria-selected="false">Imaging Test</button>
 
                             <button class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">BCT FORM</button>
                             <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Lipid Panel</button>
@@ -211,7 +211,7 @@ $result = mysqli_query($conn, $sql);
                                     <img src="../assets/images/imaging.jpg" alt="Urine Image" height = "700px" width = "990px" >
                                 </div>
                           <div class="col-md-8">
-                            <h1>Imaging Test Results</h1>
+                            <h1>Imaging Test Result Form</h1>
                             <hr>
                             <form action="imaging_test.php" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
@@ -568,3 +568,22 @@ $result = mysqli_query($conn, $sql);
     
 </body>
 </html>
+
+<!-- To check online and offline status -->
+<?php
+// Start session
+// session_start();
+require '../connection.php';
+// Check if staff member is logged in
+if (isset($_SESSION['staff_id'])) {
+    // Update online status in database to "online"
+    $staff_id = $_SESSION['staff_id'];
+    $sql = "UPDATE staffs SET status = 'online' WHERE staff_id = $staff_id";
+    mysqli_query($conn, $sql);
+    mysqli_close($conn);
+}
+
+// Check if staff member is logging out
+
+
+?>
