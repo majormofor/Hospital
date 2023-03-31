@@ -1,33 +1,31 @@
 <?php
+session_start();
 // Include database connection file
 include('../connection.php');
 
 // Check if delete button is clicked
 if(isset($_POST['delete'])){
+
+
     $patient_id = $_POST['patient_id'];
     // Delete patient from database
     $sql6 = "DELETE FROM patients WHERE patient_id = $patient_id";
-    $patient_id = $_POST['patient_id'];
-    $sql1 = "DELETE FROM blood_count_test WHERE patient_id = '$patient_id'";
-    $sql2 = "DELETE FROM imaging WHERE patient_id = '$patient_id'";
-    $sql3 = "DELETE FROM lipid_panel WHERE patient_id = '$patient_id'";
-    $sql4 = "DELETE FROM stool_tests WHERE patient_id = '$patient_id'";
-    $sql5 = "DELETE FROM urinalysis WHERE patient_id = '$patient_id'";
-    
-    mysqli_query($conn, $sql1);
-    mysqli_query($conn, $sql2);
-    mysqli_query($conn, $sql3);
-    mysqli_query($conn, $sql4);
-    mysqli_query($conn, $sql5);
-    mysqli_query($conn, $sql6);
+     mysqli_query($conn, $sql6);
 
 }
-
+if(!isset($_SESSION['staff_id'])) {
+    header('Location: ../stafflogin.php');
+    exit;
 }
+
+
 
 // Retrieve patient information from database
 $sql = "SELECT * FROM patients";
 $result = mysqli_query($conn, $sql);
+
+// $sqll = "SELECT * FROM staffs";
+// $result = mysqli_query($conn, $sqll);
 
 ?>
 
@@ -155,16 +153,58 @@ $result = mysqli_query($conn, $sql);
                         <div class="blac">
                             <div class="d-flex align-items-start">
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Create a Blog</button>
-                                    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">View Blog</button>
+                                <button class="nav-link" id="v-pills-beds-tab" data-bs-toggle="pill" data-bs-target="#v-pills-beds" type="button" role="tab" aria-controls="v-pills-beds" aria-selected="false">View Bed Spaces</button>
+
+                                    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Manage Blog</button>
                                     <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Admit Patient</button>
                                     <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">View admitted patient</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">...</div>
-                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
-                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
-                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+                                <!-- bed spaces start -->
+                                <div class="tab-pane fade" id="v-pills-beds" role="tabpanel" aria-labelledby="v-pills-beds-tab" tabindex="0">
+                                <div class="container mt-5">
+                                    <h2>Beds List</h2>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Bed Number</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                        include('../connection.php');
+
+                                                        $sql = "SELECT * FROM beds";
+                                                        $result = mysqli_query($conn, $sql);
+
+                                                        // Loop through each row in the result set
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            // Determine the status color based on the bed status
+                                                            $status_color = $row['status'] == 'occupied' ? 'text-danger' : 'text-success';
+                                                            // Print the bed data in the table
+                                                            echo '<tr>';
+                                                            echo '<td>' . $row['bed_number'] . '</td>';
+                                                            echo '<td class="' . $status_color . '">' . $row['status'] . '</td>';
+                                                            echo '</tr>';
+                                                        }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+
+                                </div>
+                                <!-- bed spaces end -->
+
+
+                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">..t.</div>
+                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">m...</div>
+                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">..k.</div>
                                 </div>
                             </div>
 
@@ -179,8 +219,8 @@ $result = mysqli_query($conn, $sql);
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                     <button class="nav-link active" id="v-pills-patientlist-tab" data-bs-toggle="pill" data-bs-target="#v-pills-patientlist" type="button" role="tab" aria-controls="v-pills-patientlist" aria-selected="true">Patient List</button>
                                     <button class="nav-link" id="v-pills-prof-tab" data-bs-toggle="pill" data-bs-target="#v-pills-prof" type="button" role="tab" aria-controls="v-pills-prof" aria-selected="false">Patients Medical Summary </button>
-                                    <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Admit Patient</button>
-                                    <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">View admitted patient</button>
+                                    <button class="nav-link" id="v-pills-admit-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admit" type="button" role="tab" aria-controls="v-pills-admit" aria-selected="false">Admit Patient</button>
+                                    <button class="nav-link" id="v-pills-wiewadmit-tab" data-bs-toggle="pill" data-bs-target="#v-pills-viewadmit" type="button" role="tab" aria-controls="v-pills-viewadmit" aria-selected="false">View admitted patient</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
                                     <!-- patient LIst starts -->
@@ -201,7 +241,10 @@ $result = mysqli_query($conn, $sql);
                                                  </tr>
                                              </thead>
                                              <tbody>
-                                                 <?php while($row = mysqli_fetch_assoc($result)){ ?>
+                                                 <?php
+                                                 $sql = "SELECT * FROM patients";
+                                                 $result = mysqli_query($conn, $sql);
+                                                 while($row = mysqli_fetch_assoc($result)){ ?>
                                                  <tr>
                                                      <td><?php echo $row['patient_id']; ?></td>
                                                      <td><?php echo $row['firstname'].' '.$row['lastname']; ?></td>
@@ -211,7 +254,7 @@ $result = mysqli_query($conn, $sql);
                                                      <td>
                                                          <form method="post" action="">
                                                              <input type="hidden" name="patient_id" value="<?php echo $row['patient_id']; ?>">
-                                                             <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                                                             <button type="submit" name="delete" class="btn btn-danger" onclick="return confirmDelete()">Delete</button>
                                                          </form>
                                                      </td>
                                                  </tr>
@@ -235,97 +278,204 @@ $result = mysqli_query($conn, $sql);
 			<th>Staff Name</th>
             <th>Action</th>
 		</tr>
-		<?php
-			// include('database_connection.php');
+        <?php
+                    include('../connection.php');
+                    $sql = "SELECT 
+                    tests.test_name, 
+                    tests.description, 
+                    tests.test_date, 
+                    CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+                    CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name,
+                    patients.patient_id
+                FROM 
+                    blood_count_test AS tests 
+                    JOIN patients ON tests.patient_id = patients.patient_id
+                    JOIN staffs ON tests.staff_id = staffs.staff_id
+                UNION ALL
+                SELECT 
+                    tests.test_name, 
+                    tests.description, 
+                    tests.test_date, 
+                    CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+                    CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name,
+                    patients.patient_id
+                FROM 
+                    imaging AS tests 
+                    JOIN patients ON tests.patient_id = patients.patient_id
+                    JOIN staffs ON tests.staff_id = staffs.staff_id
+                UNION ALL
+                SELECT 
+                    tests.test_name, 
+                    tests.description, 
+                    tests.test_date, 
+                    CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+                    CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name,
+                    patients.patient_id
+                FROM 
+                    lipid_panel AS tests 
+                    JOIN patients ON tests.patient_id = patients.patient_id
+                    JOIN staffs ON tests.staff_id = staffs.staff_id
+                UNION ALL
+                SELECT 
+                    tests.test_name, 
+                    tests.description, 
+                    tests.test_date, 
+                    CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+                    CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name,
+                    patients.patient_id
+                FROM 
+                    stool_tests AS tests 
+                    JOIN patients ON tests.patient_id = patients.patient_id
+                    JOIN staffs ON tests.staff_id = staffs.staff_id
+                UNION ALL
+                SELECT 
+                    tests.test_name, 
+                    tests.description, 
+                    tests.test_date, 
+                    CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+                    CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name,
+                    patients.patient_id
+                FROM 
+                    urinalysis AS tests 
+                    JOIN patients ON tests.patient_id = patients.patient_id
+                    JOIN staffs ON tests.staff_id = staffs.staff_id;
+                ";
 
-			$sql = "SELECT 
-            tests.test_name, 
-            tests.description, 
-            tests.test_date, 
-            CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
-            CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
-          FROM 
-            blood_count_test AS tests 
-            JOIN patients ON tests.patient_id = patients.patient_id
-            JOIN staffs ON tests.staff_id = staffs.staff_id
-          UNION ALL
-          SELECT 
-            tests.test_name, 
-            tests.description, 
-            tests.test_date, 
-            CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
-            CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
-          FROM 
-            imaging AS tests 
-            JOIN patients ON tests.patient_id = patients.patient_id
-            JOIN staffs ON tests.staff_id = staffs.staff_id
-          UNION ALL
-          SELECT 
-            tests.test_name, 
-            tests.description, 
-            tests.test_date, 
-            CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
-            CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
-          FROM 
-            lipid_panel AS tests 
-            JOIN patients ON tests.patient_id = patients.patient_id
-            JOIN staffs ON tests.staff_id = staffs.staff_id
-          UNION ALL
-          SELECT 
-            tests.test_name, 
-            tests.description, 
-            tests.test_date, 
-            CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
-            CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
-          FROM 
-            stool_tests AS tests 
-            JOIN patients ON tests.patient_id = patients.patient_id
-            JOIN staffs ON tests.staff_id = staffs.staff_id
-          UNION ALL
-          SELECT 
-            tests.test_name, 
-            tests.description, 
-            tests.test_date, 
-            CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
-            CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
-          FROM 
-            urinalysis AS tests 
-            JOIN patients ON tests.patient_id = patients.patient_id
-            JOIN staffs ON tests.staff_id = staffs.staff_id;
-          ";
+                $result = mysqli_query($conn, $sql);
 
-			$result = mysqli_query($conn, $sql);
-
-			if (mysqli_num_rows($result) > 0) {
-				while ($row = mysqli_fetch_assoc($result)) {
-	?>
+                if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
                     <tr>
-                    <td><?php echo $row['patient_name']; ?></td>
-                    <td><?php echo $row['test_name']; ?></td>
-                    <td><?php echo $row['description']; ?></td>
-                    <td><?php echo $row['test_date']; ?></td>
-                    <td><?php echo $row['staff_name']; ?></td>
+                        <td><?php echo $row['patient_name']; ?></td>
+                        <td><?php echo $row['test_name']; ?></td>
+                        <td><?php echo $row['description']; ?></td>
+                        <td><?php echo $row['test_date'];?></td>
+                        <td><?php echo $row['staff_name']; ?></td>
                     <td>
-                        <form method="post" action="">
-                            <input type="hidden" name="patient_id" value="<?php echo $row['tests.patient_id']; ?>">
-                            <button type="submit" name="delete" class="btn btn-danger">Delete</button>
-                        </form>
+                    <form method="post" action="delete_report.php">
+                        <input type="hidden" name="patient_id" value="<?php echo $row['patient_id']; ?>">
+                        <button type="submit" name="delete" class="btn btn-danger" onclick="return confirmDelete('<?php echo $row['patient_name']; ?>')">Delete</button>
+                    </form>
                     </td>
                 </tr>
                   <?php
 				}
 			} else {
-				echo "<tr><td colspan='5'>No medical reports found.</td></tr>";
-			}
+				echo "<tr><td colspan='6'>No medical reports found.</td></tr>";
+            }
+					mysqli_close($conn);
+            ?>
+        </table> 
+        <script>
+    function confirmDelete(name) {
+        return confirm("Are you sure you want to delete the medical report for " + name + "?");
+    }
+    </script>
+        
 
-			mysqli_close($conn);
-		?>
-	</table>
+
+
 	                       </div>
                                       <!-- patient Medical summary ends -->
+                                    <!-- Admit Patient Start  -->
+                                    <div class="tab-pane fade" id="v-pills-admit" role="tabpanel" aria-labelledby="v-pills-admit-tab" tabindex="0">
+                                   <div class="row">
+                                    <div class="col-md-8">
+                                    <form method="post" action="admit_patient.php">
+                                        <div class="form-group">
+                                            <label for="patient_id">Patient ID</label>
+                                            <input type="text" class="form-control" name="patient_id" id="patient_id" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="patient_id">Bed Number</label>
+                                            <input type="text" class="form-control" name="bed_number" id="bed_id" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="admission_date">Admission Date</label>
+                                            <input type="date" class="form-control" name="admission_date" id="admission_date" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="discharge_date">Discharge Date</label>
+                                            <input type="date" class="form-control" name="discharge_date" id="discharge_date" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="admission_reason">Reason for Admission</label>
+                                            <textarea class="form-control" name="admission_reason" id="reason_for_admission" required></textarea>
+                                        </div>
+                                        <button type="submit" name = "submit" class="btn btn-primary">Admit Patient</button>
+                                        </form>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <img src="../assets/images/admit.jpg" alt="admit patient">
+                                        </div>
 
-                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
-                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
+
+                                        </div>
+                                    </div>
+                                <!-- Admit Patient Ends  -->
+                                <!-- Admitted Patient Ends  -->
+                                    <div class="tab-pane fade" id="v-pills-viewadmit" role="tabpanel" aria-labelledby="v-pills-viewadmit-tab" tabindex="0">
+                                    
+
+                                            <?php
+                                // Include database connection file
+                                include '../connection.php';
+
+
+                          
+                                    // Retrieve list of admissions
+                                    $sql = "SELECT admissions.*, patients.firstname, patients.lastname, beds.bed_number, admissions.admission_date, admissions.discharge_date, admissions.admission_reason 
+                                    FROM admissions 
+                                    INNER JOIN patients ON admissions.patient_id=patients.patient_id 
+                                    INNER JOIN beds ON admissions.bed_id=beds.bed_id";
+                                    $result = $conn->query($sql);
+                                    
+                                    ?>
+                                    <div class="container">
+                                        <h2>Admissions</h2>
+                                        <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <th>Patient Name</th>
+                                            <th>Bed Number</th>
+                                            <th>Admission Date</th>
+                                            <th>Discharge Date</th>
+                                            <th>Admission Reason</th>
+                                            <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if ($result->num_rows > 0) {
+                                            while($row = $result->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td>" . $row["firstname"] . " " . $row["lastname"] . "</td>";
+                                                echo "<td>" . $row["bed_number"] . "</td>";
+                                                echo "<td>" . $row["admission_date"] . "</td>";
+                                                echo "<td>" . $row["discharge_date"] . "</td>";
+                                                echo "<td>" . $row["admission_reason"] . "</td>";
+
+
+                                                echo "<td>";
+                                                echo "<form method='POST' action = delete_admission.php>";
+                                                echo "<input type='hidden' name='admission_id' value='" . $row["admission_id"] . "'>";
+                                                echo "<button type='submit' class='btn btn-danger'>Delete</button>";
+                                                echo "</form>";
+                                                echo "</td>";
+                                                echo "</tr>";
+                                            }
+                                            } else {
+                                            echo "<tr><td colspan='3'>No admissions found.</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                        </table>
+                                    </div>
+
+                                    </div>
+                              <!-- Admitted Patient Ends  -->
+
                                 </div>
                             </div>
 
@@ -340,13 +490,165 @@ $result = mysqli_query($conn, $sql);
                             <div class="d-flex align-items-start">
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                     <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Staff List</button>
-                                    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Staff Medical Report Summary </button>
+                                    <button class="nav-link" id="v-pills-summary-tab" data-bs-toggle="pill" data-bs-target="#v-pills-summary" type="button" role="tab" aria-controls="v-pills-summary" aria-selected="false">Staff Medical Report Summary </button>
                                     <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Staff Registration</button>
                                     <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Staff Medical Prescriptions</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">...</div>
-                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
+                                  <!-- staff List start -->
+                                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                                <div class="container mt-5">
+                                        <h2>Staff List</h2>
+                                        <table class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Job Title</th>
+                                                    <th>Email</th>
+                                                    <th>Address</th>
+                                                    <th>Phone</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                // Include the database connection
+                                                include '../connection.php';
+
+                                                // Prepare the SQL statement
+                                                $stmt = $conn->prepare("SELECT * FROM staffs");
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
+
+                                                // Loop through each row in the result set
+                                                while ($row = $result->fetch_assoc()) {
+                                                    // Print the staff data in the table
+                                                    echo '<tr>';
+                                                    echo '<td>' . $row['first_name'] . '</td>';
+                                                    echo '<td>' . $row['last_name'] . '</td>';
+                                                    echo '<td>' . $row['job_title'] . '</td>';
+                                                    echo '<td>' . $row['email'] . '</td>';
+                                                    echo '<td>' . $row['address'] . '</td>';
+                                                    echo '<td>' . $row['phone'] . '</td>';
+                                                    echo '<td>
+                                                    <form method="POST" action="delete_staff.php">
+                                                    <input type="hidden" name="staff_id" value="' . $row['staff_id'] . '">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                 </form>
+
+
+                                                  </td>';
+                                            echo '</tr>';
+                                        }
+                                                // Close the statement and database connection
+                                                $stmt->close();
+                                                $conn->close();
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    </div>
+                                <!-- staff List End  -->
+                                    <!-- staff medical summary start -->
+                                    <div class="tab-pane fade" id="v-pills-summary" role="tabpanel" aria-labelledby="v-pills-summary-tab" tabindex="0">
+                                    <div class="container mt-5">
+                                    <h2>Medical Report Summary</h2>
+<table>
+	<tr>
+		<th>Staff Name</th>
+		<th>Test Name</th>
+		<th>Description</th>
+		<th>Test Date</th>
+		<th>Patient Name</th>
+	</tr>
+	<?php
+		include('../connection.php');
+		
+		$sql = "SELECT 
+					tests.test_name, 
+					tests.description, 
+					tests.test_date, 
+					CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+					CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
+				FROM 
+					blood_count_test AS tests 
+					JOIN patients ON tests.patient_id = patients.patient_id
+					JOIN staffs ON tests.staff_id = staffs.staff_id
+				UNION ALL
+				SELECT 
+					tests.test_name, 
+					tests.description, 
+					tests.test_date, 
+					CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+					CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
+				FROM 
+					imaging AS tests 
+					JOIN patients ON tests.patient_id = patients.patient_id
+					JOIN staffs ON tests.staff_id = staffs.staff_id
+				UNION ALL
+				SELECT 
+					tests.test_name, 
+					tests.description, 
+					tests.test_date, 
+					CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+					CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
+				FROM 
+					lipid_panel AS tests 
+					JOIN patients ON tests.patient_id = patients.patient_id
+					JOIN staffs ON tests.staff_id = staffs.staff_id
+				UNION ALL
+				SELECT 
+					tests.test_name, 
+					tests.description, 
+					tests.test_date, 
+					CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+					CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
+				FROM 
+					stool_tests AS tests 
+					JOIN patients ON tests.patient_id = patients.patient_id
+					JOIN staffs ON tests.staff_id = staffs.staff_id
+				UNION ALL
+				SELECT 
+					tests.test_name, 
+					tests.description, 
+					tests.test_date, 
+					CONCAT(patients.firstname, ' ', patients.lastname) AS patient_name, 
+					CONCAT(staffs.first_name, ' ', staffs.last_name) AS staff_name
+				FROM 
+					urinalysis AS tests 
+					JOIN patients ON tests.patient_id = patients.patient_id
+					JOIN staffs ON tests.staff_id = staffs.staff_id
+				";
+		
+		$result = mysqli_query($conn, $sql);
+		
+		if (mysqli_num_rows($result) > 0) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				?>
+				<tr>
+					<td><?php echo $row['staff_name']; ?></td>
+					<td><?php echo $row['test_name']; ?></td>
+					<td><?php echo $row['description']; ?></td>
+					<td><?php echo $row['test_date'];?></td>
+					<td><?php echo $row['patient_name']; ?></td>
+				</tr>
+				<?php
+			}
+		}
+        mysqli_close($conn);
+		?>
+	</tbody>
+</table>
+        
+
+          </div>
+
+                                    </div>
+                                  <!-- staff medical summary end-->
+
                                     <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
                                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
                                 </div>
@@ -424,3 +726,12 @@ $result = mysqli_query($conn, $sql);
 
 </body>
 </html>
+
+<script>
+  function confirmDelete() {
+    if (confirm("Are you sure you want to delete?")) {
+      // User clicked "OK"
+      return true;
+    }
+}
+</script>

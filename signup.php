@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="contactus.html">Sign Up</a>
+          <a class="nav-link" href="contactus.html">New Patient</a>
         </li>
         
       </ul>

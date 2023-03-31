@@ -54,14 +54,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 	
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="CSS/loginStyle.css ?v=<?php echo time();?>">
+    <link rel="stylesheet" href="assets/CSS/loginStyle.css ?v=<?php echo time();?>">
   </head>
   <body>
      <!-- Navbar starts -->
      <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
   <div class="container-fluid">
   <a class="navbar-brand" href="#">
-      <img src="/patient/images/log.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+      <img src="assets/images/log.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
       Mofor Practise Care
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,7 @@
   
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="signup.php">Sign Up</a>
+          <a class="nav-link" href="signup.php">New Patient</a>
         </li>
         
       </ul>
@@ -151,7 +151,7 @@
 
         </div>
         <div class="col-md-6">
-        <img src="images/register.jpg" alt="You can do it" sizes="" srcset="">    
+        <img src="assets/images/register.jpg" alt="You can do it" sizes="" srcset="">    
         </div>
        
       </div>
