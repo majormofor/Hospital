@@ -120,17 +120,128 @@ mysqli_close($conn);
                         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</button>
                             <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</button>
-                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">View Prescriptions</button>
                             <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Book an Appointment</button>
-                            <button class="nav-link" id="v-pills-appointment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-appointment" type="button" role="tab" aria-controls="v-pills-appointment" aria-selected="false">View Appointment</button>
+                            <button class="nav-link" id="v-pills-appointment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-appointment" type="button" role="tab" aria-controls="v-pills-appointment" aria-selected="false">View Appointments</button>
                             <button class="nav-link" id="v-pills-MedicalRecord-tab" data-bs-toggle="pill" data-bs-target="#v-pills-MedicalRecord" type="button" role="tab" aria-controls="v-MedicalRecord" aria-selected="false">Medical Test Records</button>
 
 
                         </div>
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0"><img src="../assets/images/book.avif" alt="ok" sizes=""></div>
-                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
-                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
+                            
+                            <!-- patient profile starts -->
+                            
+
+                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+
+                            <?php 
+                            // Include database connection
+                            include '../connection.php';
+
+                            // Get patient ID from session
+                            $patient_id = $_SESSION['patient_id'];
+
+                            // Query patient data for patient ID
+                            $sql = "SELECT * FROM patients WHERE patient_id = '$patient_id'";
+                            $result = mysqli_query($conn, $sql);
+
+                            // Check if there is a patient with this ID
+                            if (mysqli_num_rows($result) > 0) {
+                                // Get patient data
+                                $row = mysqli_fetch_assoc($result);
+                                $firstname = $row['firstname'];
+                                $lastname = $row['lastname'];
+                                $email = $row['email'];
+                                $dob = $row['dob'];
+                                $maritalstatus = $row['maritalstatus'];
+                                $address = $row['address'];
+                                $nationality = $row['nationality'];
+                            } else {
+                                // Patient not found
+                                echo "Patient not found.";
+                                exit;
+                            }
+                            ?>
+
+
+
+                            <div class="container">
+                            <h1><?php echo $firstname . " " . $lastname ?>'s Profile</h1>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>First Name:</strong> <?php echo $firstname ?></p>
+                                    <p><strong>Last Name:</strong> <?php echo $lastname ?></p>
+                                    <p><strong>Email:</strong> <?php echo $email ?></p>
+                                    <p><strong>Date of Birth:</strong> <?php echo $dob ?></p>
+                                    <p><strong>Marital Status:</strong> <?php echo $maritalstatus ?></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Address:</strong> <?php echo $address ?></p>
+                                    <p><strong>Nationality:</strong> <?php echo $nationality ?></p>
+                                    <a href='updatepatient.php?patient_id=<?php echo $row["patient_id"]; ?>' class='btn btn-primary'>Edit</a>
+
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                            
+                            <!-- patient profile ends -->
+
+                            <!-- book an appointment start -->
+
+                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">
+                            <?php
+
+
+                                    // Include database connection
+                                    include '../connection.php';
+
+                                    // Get patient ID from session
+                                    $patient_id = $_SESSION['patient_id'];
+
+                                    // Query prescription data for patient ID
+                                    $sql = "SELECT * FROM prescription WHERE patient_id = '$patient_id'";
+                                    $result = mysqli_query($conn, $sql);
+
+                                    // Check if there are any prescriptions for this patient
+                                    if (mysqli_num_rows($result) > 0) {
+                                        // Print prescription data in a table
+                                        echo '<div class="container">';
+                                        echo '<h1 class="text-center mb-5">Your Prescriptions</h1>';
+                                        echo '<div class="table-responsive">';
+                                        echo '<table class="table table-striped">';
+                                        echo '<thead>';
+                                        echo '<tr><th>Prescription ID</th><th>Prescription Date</th><th>Medicine Name</th><th>Dosage</th><th>Frequency</th><th>Instructions</th></tr>';
+                                        echo '</thead>';
+                                        echo '<tbody>';
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $row['prescription_id'] . "</td>";
+                                            echo "<td>" . $row['prescription_date'] . "</td>";
+                                            echo "<td>" . $row['medicine_name'] . "</td>";
+                                            echo "<td>" . $row['dosage'] . "</td>";
+                                            echo "<td>" . $row['frequency'] . "</td>";
+                                            echo "<td>" . $row['instructions'] . "</td>";
+                                            echo "</tr>";
+                                        }
+                                        echo '</tbody>';
+                                        echo '</table>';
+                                        echo '</div>';
+                                        echo '</div>';
+                                    } else {
+                                        echo '<div class="container">';
+                                        echo '<h2 class="text-center mt-5">You have no prescriptions.</h2>';
+                                        echo '</div>';
+                                    }
+
+                                    // Close database connection
+                                    mysqli_close($conn);
+                                    ?>
+
+                            </div>
+                           <!-- book an appointment End -->
                             <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">
                             <div class="row">
                             <div class="col-md-5">

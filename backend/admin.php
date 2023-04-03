@@ -68,6 +68,8 @@ $result = mysqli_query($conn, $sql);
 			background-color: #ddd;
 		}
     </style>
+            <img src="../assets/images/admin1.jpg" alt="background image" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+
         <!-- Navbar starts -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
@@ -108,15 +110,147 @@ $result = mysqli_query($conn, $sql);
   </div>
 </nav>
         <!-- Navbar ends -->
-    
+    <br>
      <main>
-            <div class="container">
+            <div class="container blac">
+                <h3>MPC Dashboard</h3>
+                <div class="row">
+                    <!-- Number of admitted patient -->
+                    <div class="col-md-6">
+
+                                            <?php
+                            include('../connection.php');
+
+                            // Count number of patients
+                            $patients_query = "SELECT COUNT(*) AS patient_count FROM patients";
+                            $patients_result = mysqli_query($conn, $patients_query);
+                            $patient_count = mysqli_fetch_assoc($patients_result)['patient_count'];
+
+                            // Count number of admitted patients
+                            $admitted_query = "SELECT COUNT(*) AS admitted_count FROM admissions WHERE discharge_date IS not NULL";
+                            $admitted_result = mysqli_query($conn, $admitted_query);
+                            $admitted_count = mysqli_fetch_assoc($admitted_result)['admitted_count'];
+                        ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card text-white bg-primary mb-3">
+                                    <div class="card-header">Total Registered Patients</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $patient_count; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-white bg-danger mb-3">
+                                    <div class="card-header">Admitted Patients</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $admitted_count; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Number of staff online -->
+
+
+                    <div class="col-md-6">
+
+                                            <?php
+                            include('../connection.php');
+                            $online_query = "SELECT COUNT(*) as online_count FROM staffs WHERE status='Online'";
+                            $offline_query = "SELECT COUNT(*) as offline_count FROM staffs WHERE status='Offline'";
+                            
+                            $online_result = mysqli_query($conn, $online_query);
+                            $offline_result = mysqli_query($conn, $offline_query);
+                            
+                            if(mysqli_num_rows($online_result) > 0 && mysqli_num_rows($offline_result) > 0) {
+                                $online_row = mysqli_fetch_assoc($online_result);
+                                $offline_row = mysqli_fetch_assoc($offline_result);
+                                
+                                $online_count = $online_row['online_count'];
+                                $offline_count = $offline_row['offline_count'];
+                            } else {
+                                $online_count = 0;
+                                $offline_count = 0;
+                            }
+                        ?>
+
+                            <div class="row">
+                            <div class="col-md-6">
+                                <div class="card text-white bg-success mb-3">
+                                    <div class="card-header">Online Staffs</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $online_count; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-white bg-danger mb-3">
+                                    <div class="card-header">offline Staffs </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $offline_count; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+
+                
+            </div>
+        
+            <br>
+                <!-- BED SPACES -->
+            <!-- <div class="container"> -->
                 <div class="row">
                     <div class="col-md-6">
 
-                                        ada
+                    <?php
+                            include('../connection.php');
+                            $online_query = "SELECT COUNT(*) as Available_bed FROM beds WHERE status='available'";
+                            $offline_query = "SELECT COUNT(*) as occupied_bed FROM beds WHERE status='occupied'";
+                            
+                            $online_result = mysqli_query($conn, $online_query);
+                            $offline_result = mysqli_query($conn, $offline_query);
+                            
+                            if(mysqli_num_rows($online_result) > 0 && mysqli_num_rows($offline_result) > 0) {
+                                $online_row = mysqli_fetch_assoc($online_result);
+                                $offline_row = mysqli_fetch_assoc($offline_result);
+                                
+                                $online_count = $online_row['Available_bed'];
+                                $offline_count = $offline_row['occupied_bed'];
+                            } else {
+                                $online_count = 0;
+                                $offline_count = 0;
+                            }
+                        ?>
+                         <div class="row">
+                            <div class="col-md-6">
+                                <div class="card text-white bg-success mb-3">
+                                    <div class="card-header">Available Beds</div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $online_count; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card text-white bg-danger mb-3">
+                                    <div class="card-header">Occupied Beds </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $offline_count; ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
 
                     </div>
+                     <!-- BED SPACES -->
+
                     <div class="col-md-6">
 
                             aaa
@@ -491,7 +625,7 @@ $result = mysqli_query($conn, $sql);
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                     <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Staff List</button>
                                     <button class="nav-link" id="v-pills-summary-tab" data-bs-toggle="pill" data-bs-target="#v-pills-summary" type="button" role="tab" aria-controls="v-pills-summary" aria-selected="false">Staff Medical Report Summary </button>
-                                    <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Staff Registration</button>
+                                    <button class="nav-link" id="v-pills-registers-tab" data-bs-toggle="pill" data-bs-target="#v-pills-registers" type="button" role="tab" aria-controls="v-pills-registers" aria-selected="false">Staff Registration</button>
                                     <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Staff Medical Prescriptions</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
@@ -508,6 +642,8 @@ $result = mysqli_query($conn, $sql);
                                                     <th>Email</th>
                                                     <th>Address</th>
                                                     <th>Phone</th>
+                                                    <th>status</th>
+
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -531,6 +667,8 @@ $result = mysqli_query($conn, $sql);
                                                     echo '<td>' . $row['email'] . '</td>';
                                                     echo '<td>' . $row['address'] . '</td>';
                                                     echo '<td>' . $row['phone'] . '</td>';
+                                                    echo '<td>' . $row['status'] . '</td>';
+
                                                     echo '<td>
                                                     <form method="POST" action="delete_staff.php">
                                                     <input type="hidden" name="staff_id" value="' . $row['staff_id'] . '">
@@ -648,8 +786,56 @@ $result = mysqli_query($conn, $sql);
 
                                     </div>
                                   <!-- staff medical summary end-->
+                                  <!-- staff registration start-->
 
-                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
+                                    <div class="tab-pane fade" id="v-pills-registers" role="tabpanel" aria-labelledby="v-pills-registers-tab" tabindex="0">
+                                    <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                        <form action="add_staff.php" method="post">
+                                            <h2>Add Staff</h2>
+                                            <div class="form-group">
+                                            <label for="first_name">First Name:</label>
+                                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="last_name">Last Name:</label>
+                                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="job_title">Job Title:</label>
+                                            <input type="text" class="form-control" id="job_title" name="job_title" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="email">Email:</label>
+                                            <input type="email" class="form-control" id="email" name="email" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="password">Password:</label>
+                                            <input type="password" class="form-control" id="password" name="password" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="password">Confirm Password:</label>
+                                            <input type="password" class="form-control" id="password" name="confirmpassword" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="phone">Phone Number:</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="Address">Address:</label>
+                                            <input type="text" class="form-control" id="job_title" name="address" required>
+                                            </div>
+                                            <button type="submit" name = "submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                    </div>
+
+
+                                    </div>
+                                 <!-- staff registration start-->
+
                                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
                                 </div>
                             </div>

@@ -35,6 +35,7 @@ $result = mysqli_query($conn, $sql);
     <title>Staff</title>
 </head>
 <body>
+<img src="../assets/images/admin.jpg" alt="background image" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
 
 <style>
 
@@ -103,13 +104,73 @@ $result = mysqli_query($conn, $sql);
                         <button class="nav-link" id="pills-Mine-tab" data-bs-toggle="pill" data-bs-target="#pills-Mine" type="button" role="tab" aria-controls="pills-Mine" aria-selected="false">My Appointedment</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-medication-tab" data-bs-toggle="pill" data-bs-target="#pills-medication" type="button" role="tab" aria-controls="pills-medication" aria-selected="false">Prescription Form</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pills-Record-tab" data-bs-toggle="pill" data-bs-target="#pills-Record" type="button" role="tab" aria-controls="pills-Record" aria-selected="false">Medical Record Form</button>
                     </li>
+                    
 
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">...</div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">...</div>
+                   
+                   
+                   
+                    <!-- Staff profile starts -->
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+                    <div class="container">
+                    
+                                        
+                                                <?php
+                                            require '../connection.php';
+
+                                            
+
+
+                                // Check if user is logged in
+                                if (!isset($_SESSION['staff_id'])) {
+                                    header("Location: stafflogin.php");
+                                    exit();
+                                }
+
+                            // Retrieve staff information from database
+                            $sql = "SELECT * FROM staffs WHERE staff_id = " . $_SESSION['staff_id'];
+                            $result = mysqli_query($conn, $sql);
+
+                            if (mysqli_num_rows($result) == 1) {
+                                // Output data for current user
+                                $row = mysqli_fetch_assoc($result);
+                                ?>
+
+                                    <div class="card" style="width: 70rem;">
+                                    <div class="card-header">
+                                    <h2><?php echo $row["first_name"]; ?> Profile</h2>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><p>Staff ID: <?php echo $row["staff_id"]; ?></p></li>
+                                        <li class="list-group-item"><p>First Name: <?php echo $row["first_name"]; ?></p></li>
+                                        <li class="list-group-item"><p>Last Name: <?php echo $row["last_name"]; ?></p></li>
+                                        <li class="list-group-item"><p>Job Title: <?php echo $row["job_title"]; ?></p></li>
+                                        <li class="list-group-item"><p>Email: <?php echo $row["email"]; ?></p></li>
+                                        <li class="list-group-item"><p>Phone Number: <?php echo $row["phone"]; ?></p></li>
+                                        <li class="list-group-item"><p>Address: <?php echo $row["address"]; ?></p></li>
+                                        <a href='edit_staff.php?staff_id=<?php echo $row["staff_id"]; ?>' class='btn btn-primary'>Edit</a>
+
+                                    </ul>
+                                    </div>
+                                    
+                                <?php
+                                } else {
+                                    echo "0 results";
+                                }
+                            
+                                ?>
+                            </div>
+
+                                </div>
+                <!-- Staff profile -->
+
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
 
                     <div class="container">
@@ -117,7 +178,9 @@ $result = mysqli_query($conn, $sql);
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Patient Name</th>
+                <th>Patient First Name</th>
+                <th>Patient Last Name</th>
+
                 <th>Date</th>
                 <th>Time</th>
                 <th>Reason</th>
@@ -125,9 +188,30 @@ $result = mysqli_query($conn, $sql);
             </tr>
         </thead>
         <tbody>
-            <?php while($row = mysqli_fetch_assoc($result)) { ?>
+            <?php 
+            require '../connection.php';
+            // Get all pending appointments
+            $sql = "SELECT appointments.*, patients.* FROM appointments JOIN patients ON appointments.patient_id = patients.patient_id WHERE appointments.accepted = 0 AND appointments.rejected = 0";
+            
+            
+            $result = mysqli_query($conn, $sql);
+            
+               
+                if(!isset($_SESSION['staff_id'])) {
+                    header('Location: ../stafflogin.php');
+                    exit;
+                }
+            
+                $staff_id = $_SESSION['staff_id'];
+            
+            
+            
+            
+            while($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
                 <td><?php echo $row['firstname']; ?></td>
+                <td><?php echo $row['lastname']; ?></td>
+
                 <td><?php echo $row['appointment_date']; ?></td>
                 <td><?php echo $row['appointment_time']; ?></td>
                 <td><?php echo $row['reason']; ?></td>
@@ -190,6 +274,91 @@ $result = mysqli_query($conn, $sql);
                             ?>.
 
                         </div>
+                        <!-- My appointment ends -->
+
+                        <!-- medication starts -->
+
+                        <div class="tab-pane fade" id="pills-medication" role="tabpanel" aria-labelledby="pills-medication-tab" tabindex="0">
+                        <?php
+                            $staff_id = $_SESSION['staff_id'];
+
+                            // Check if form is submitted
+                            if (isset($_POST['submit'])) {
+                                // Include database connection
+                                include '../connection.php';
+
+                                // Prepare and bind parameters
+                                $stmt = $conn->prepare("INSERT INTO prescription (patient_id, prescription_date, medicine_name, dosage, frequency, instructions, staff_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                                $stmt->bind_param("isssssi", $patient_id, $prescription_date, $medicine_name, $dosage, $frequency, $instruction, $staff_id);
+
+                                // Get form data
+                                $patient_id = $_POST['patient_id'];
+                                $prescription_date = $_POST['prescription_date'];
+                                $medicine_name = $_POST['medicine_name'];
+                                $dosage = $_POST['dosage'];
+                                $frequency = $_POST['frequency'];
+                                $instruction = $_POST['instructions'];
+
+                                // Execute query and check if successful
+                                if ($stmt->execute()) {
+                                    echo "<script> alert('Prescription created successfully.');</script>";
+                                    
+                                } else {
+                                    echo "Error: " . $stmt->error;
+                                }
+
+                                // Close statement and connection
+                                $stmt->close();
+                                $conn->close();
+                            }
+                            ?>
+                       
+
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <img src="../assets/images/prescription.jpg" alt="Urine Image" height = "600px" width = "499px" >
+
+                                </div>
+                            <div class="col-md-7">
+                                <h1>Create a Prescription</h1>
+                                 <form method="POST">
+                                        <div class="form-group">
+                                            <label for="patient_id">Patient ID:</label>
+                                            <input type="text" class="form-control" id="patient_id" name="patient_id" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prescription_date">Prescription Date:</label>
+                                            <input type="date" class="form-control" id="prescription_date" name="prescription_date" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="medicine_name">Medicine Name:</label>
+                                            <input type="text" class="form-control" id="medicine_name" name="medicine_name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="dosage">Dosage:</label>
+                                            <input type="text" class="form-control" id="dosage" name="dosage" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="frequency">Frequency:</label>
+                                            <input type="text" class="form-control" id="frequency" name="frequency" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="instruction">Instruction:</label>
+                                            <input type="text" class="form-control" id="instruction" name="instructions" required>
+                                        </div>
+                                        <input type="hidden" name="staff_id" value="<?php echo $staff_id; ?>">
+                                        <button type="submit" name="submit" class="btn btn-primary">Create</button>
+                                 </form>
+                            </div>
+                         </div>
+
+                    
+                    
+                        </div>
+                        <!-- medication ends -->
+
+
+                        
                         <div class="tab-pane fade" id="pills-Record" role="tabpanel" aria-labelledby="pills-Record-tab" tabindex="0">
                         
                         <div class="d-flex align-items-start">
@@ -526,15 +695,7 @@ $result = mysqli_query($conn, $sql);
                                             </div>
 
                             </div>
-                            <!-- Stool Test End -->
-                            <!-- imaging Test start -->
-                            <!-- <div class="tab-pane fade" id="v-pills-set" role="tabpanel" aria-labelledby="v-pills-set-tab" tabindex="0">
-                                hello
-
-                            </div> -->
-                             <!-- imaging Test start -->
-
-
+                    
                         </div>
                         </div>                     
 
@@ -557,9 +718,20 @@ $result = mysqli_query($conn, $sql);
 
 
     </div>
+                        </div>
+                        
 
+                  
 
+                   
+                    </div>
+                    </div>
 
+                        </div>
+                        
+                        </div>
+
+                        
     <!-- footer starts -->
     <footer class="footer">
 	    <p>Mofor Practice care &copy; 2023</p>
