@@ -1,7 +1,37 @@
+
+<?php
+
+require 'connection.php';
+// Process form submission
+if (isset($_POST['submit'])) {
+    $patient_name = $_POST['patient_name'];
+    $title = $_POST['title'];
+    $message = $_POST['message'];
+
+    // Escape special characters to prevent SQL injection
+    $patient_name = mysqli_real_escape_string($conn, $patient_name);
+    $title = mysqli_real_escape_string($conn, $title);
+    $message = mysqli_real_escape_string($conn, $message);
+
+    // Insert form data into database
+    $sql = "INSERT INTO patient_testimonials (patient_name, title, message) VALUES ('$patient_name', '$title', '$message')";
+    if (mysqli_query($conn, $sql)) {
+		echo "<script> alert('Testimonial created successfully!');</script>";
+		header('Location: /hospital/backend/patient.php');
+		exit;
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
+}
+
+// Close database connection
+mysqli_close($conn);
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Feedback</title>
+	<title>Testimonial</title>
 	<!-- include bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -76,7 +106,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link " aria-current="page" href="home.html">Home</a>
+          <a class="nav-link " aria-current="page" href="../patient.php">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="about.html">About</a>
@@ -89,7 +119,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="Feedback.php">Patient Reviews</a>
+          <a class="nav-link" href="../hospital/backend/Feedback.php">Patient Testimonial</a>
         </li>
         
       </ul>
@@ -101,15 +131,15 @@
 
         <!-- Navbar ends -->
 	<div class="container">
-		<h1>Feedback Form</h1>
-		<form method="POST" action="feedback_process.php">
+		<h1>Patient Testimonial Form</h1>
+		<form method="POST" action="">
 			<label>Patient Name:</label>
 			<input type="text" name="patient_name" required>
-			<label>Title of Feedback:</label>
-			<input type="text" name="feedback_title" required>
-			<label>Feedback Message:</label>
-			<textarea name="feedback_message" rows="5" required></textarea>
-			<input type="submit" value="Submit Feedback">
+			<label>Title of Testimonial:</label>
+			<input type="text" name="title" required>
+			<label>Testimonial Message:</label>
+			<textarea name="message" rows="5" required></textarea>
+			<input type="submit" name = "submit" value="Submit Feedback">
 		</form>
 	</div>
 

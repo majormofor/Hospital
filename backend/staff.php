@@ -32,10 +32,25 @@ $result = mysqli_query($conn, $sql);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 	
-    <title>Staff</title>
+    <title>Staff Page</title>
 </head>
 <body>
-<img src="../assets/images/admin.jpg" alt="background image" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+                        <?php
+                        require '../connection.php';
+
+                        // Get patient ID from session
+                        $staff_id = $_SESSION['staff_id'];
+
+
+                        $sql = "SELECT * FROM staffs WHERE staff_id = '$staff_id'";
+                        $result = mysqli_query($conn, $sql);
+
+                        // Fetch patient data
+                        $row = mysqli_fetch_assoc($result);
+
+                        ?>
+
+<img src="../assets/images/stafff.jpg" alt="background image" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
 
 <style>
 
@@ -45,8 +60,22 @@ $result = mysqli_query($conn, $sql);
         padding: 20px;
         margin: 20px auto;
         /* max-width: 800px; */
+
     }
+   
+.footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            bottom: 0;
+            position: fixed; 
+            width: 100%; 
+            
+        
+        }
+
 </style>
+
 
   <!-- Navbar starts -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -113,7 +142,57 @@ $result = mysqli_query($conn, $sql);
 
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">...</div>
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+
+ <div class="container mt-5">
+        <h2>Welcome <?php echo $row["first_name"]; ?> to the Staff Homepage</h2>
+        <p>As a member of our team, we appreciate your hard work and dedication to providing high-quality healthcare to our patients.</p>
+        <hr>
+        <h4>Upcoming Tasks</h4>
+        <ul>
+            <li>Meeting with the hospital administration at 2:00 PM today</li>
+            <li>Follow up with patient John Doe about lab results</li>
+            <li>Prepare for upcoming surgery on patient Jane Smith</li>
+        </ul>
+        <hr>
+        <h4>Important Announcements</h4>
+        <ul>
+            <li>Reminder to complete annual training by end of month</li>
+            <li>New protocols for COVID-19 screening and testing</li>
+            <li>Upcoming hospital-wide survey to gather feedback from patients and staff</li>
+        </ul>
+        <hr>
+        <div class="row">
+        <div class="col-md-6">
+                <div class="card">
+                    <img class="card-img-top" src="../assets/images/blog.jpg" alt="Card image cap" height = "150" width = "350">
+                    <div class="card-body">
+                       <h5 class="card-title">Write a Blog Post</h5>
+                        <p class="card-text">Share your experience and knowledge to help others by writing a Blog about your care at Mofor Practice.</p>
+                        <a href="blogpost.php" class="btn btn-primary">Write a Blog Post</a>
+                        </div>
+                            </div>
+                        </div><div class="col-md-6">
+                        <div class="card">
+                            <img class="card-img-top" src="../assets/images/test.jpg" alt="Card image cap" height = "150" width = "350">
+                            <div class="card-body">
+                            <h5 class="card-title">Write a Testimonial</h5>
+                                <p class="card-text">Share your experience and help others by writing a testimonial about your care at Mofor Practice.</p>
+                                <a href="../createfeedback.php" class="btn btn-primary">Write a Testimonial</a>
+                                </div>
+                                    </div>
+                                </div>
+                                </div>
+
+
+
+
+
+    
+    </div>
+
+
+                    </div>
                    
                    
                    

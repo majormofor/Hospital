@@ -29,17 +29,17 @@ if (isset($_POST['submit'])) {
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     
     // Update patient data in database
-    $sql = "UPDATE patient SET email='$email', maritalstatus='$maritalstatus', address='$address' WHERE patient_id='$patient_id'";
+    $sql = "UPDATE patients SET email='$email', maritalstatus='$maritalstatus', address='$address' WHERE patient_id='$patient_id'";
     if (mysqli_query($conn, $sql)) {
-        // Refresh page to show updated data
-        header("Refresh:0");
+
+        header("Location: patient.php");
     } else {
         echo "Error updating record: " . mysqli_error($conn);
     }
 }
 
 // Close database connection
-mysqli_close($conn);
+// mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +83,7 @@ mysqli_close($conn);
             </ul>
             <ul class="nav justify-content-end">
                 <li class="nav-item">
-                    <a class="badge text-bg-light nav-link">Welcome Mofor</a>
+                    <a class="badge text-bg-light nav-link">Welcome <?php echo $firstname ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="createfeedback.php">Create a Feedback</a>
@@ -119,18 +119,14 @@ mysqli_close($conn);
                     <option value="Divorced" <?php if ($maritalstatus == "Divorced") echo "selected" ?>>Divorced</option>
                     <option value="Widowed" <?php if ($maritalstatus == "Widowed") echo "selected" ?>>Widowed</option>
                     </select>
-                    </div>
+             </div>
                    
-                    <div class="form-group">
+                <div class="form-group">
                     <label class="col-sm-2 col-form-label">Address</label>
                     <textarea class="form-control" name="address" rows="3"><?php echo $address ?></textarea>
-                    </div>
-                    
-                    
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                    </div>
-                    </form>
+                </div> 
+                <button type="submit" name ="submit" class="btn btn-primary">Save Changes</button>
+                </form>
 
 </div>
 </body>

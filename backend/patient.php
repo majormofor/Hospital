@@ -28,7 +28,7 @@ if (mysqli_query($conn, $sql)) {
 }
 
 // close the database connection
-mysqli_close($conn);
+// mysqli_close($conn);
 }
 // } else {
 // echo "Please fill all the fields.";
@@ -61,6 +61,20 @@ mysqli_close($conn);
             }
 
 </style>
+<?php
+require '../connection.php';
+
+// Get patient ID from session
+$patient_id = $_SESSION['patient_id'];
+
+
+$sql = "SELECT * FROM patients WHERE patient_id = '$patient_id'";
+$result = mysqli_query($conn, $sql);
+
+// Fetch patient data
+$row = mysqli_fetch_assoc($result);
+
+?>
      
     <!-- Navbar starts -->
  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -75,7 +89,7 @@ mysqli_close($conn);
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="page" href="admin.php">Home</a>
+                    <a class="nav-link " aria-current="page" href="patient.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="about.html">About</a>
@@ -87,16 +101,16 @@ mysqli_close($conn);
                     <a class="nav-link" href="contactus.html">Contact Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Feedback.php">Patient Reviews</a>
+                    <a class="nav-link" href="Feedback.php">Patient Testimonial</a>
                 </li>
                 
       </ul>
       <ul class="nav justify-content-end">
         <li class="nav-item">
-             <a class="badge text-bg-light nav-link">Welcome Mofor</a>
+             <a class="badge text-bg-light nav-link">Welcome <?php echo $row['firstname']; ?></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="createfeedback.php">Create a Feedback</a>
+            <a class="nav-link" href="../createfeedback.php">Write a Testimonial</a>
         </li>
        
       </ul>
@@ -128,7 +142,52 @@ mysqli_close($conn);
 
                         </div>
                         <div class="tab-content" id="v-pills-tabContent">
-                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0"><img src="../assets/images/book.avif" alt="ok" sizes=""></div>
+                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+
+                            <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Welcome <?php echo $row['firstname']; ?> to Mofor Practice Care</h1>
+            <p>We care about your health and well-being. Our team of experienced medical professionals is dedicated to providing you with the best possible care.</p>
+            <hr class="my-4">
+            <p>On our website, you can book appointments, check your medical results, and keep track of your health history. Just by using the links at the left hand side of these page</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top" src="../assets/images/appoint2.png" alt="Card image cap" height = "150" width = "350">
+                    <div class="card-body">
+                        <h5 class="card-title">Book an Appointment</h5>
+                        <p class="card-text">Easily book an appointment with one of our medical professionals online.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top" src="../assets/images/test.jpg" alt="Card image cap" height = "150" width = "350">
+                    <div class="card-body">
+                       <h5 class="card-title">Write a Testimonial</h5>
+                        <p class="card-text">Share your experience and help others by writing a testimonial about your care at Mofor Practice.</p>
+                        <a href="#" class="btn btn-primary">Write a Testimonial</a>
+                        </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                        <div class="card">
+                        <img class="card-img-top" src="../assets/images/test1.jpg" alt="Card image cap" height = "150" width = "350">
+
+                        <div class="card-body">
+                        <h5 class="card-title">Testimonials</h5>
+                            <p class="card-text">Hear from patients like you about their experiences at Mofor Practice Care.</p>
+                            <a href="#" class="btn btn-primary">Read Testimonials</a> </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+
+                            </div>
                             
                             <!-- patient profile starts -->
                             

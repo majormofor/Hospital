@@ -90,13 +90,13 @@ $result = mysqli_query($conn, $sql);
                     <a class="nav-link" href="Feedback.php">Patient Reviews</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="blogform.php">Post Blog</a>
+                    <a class="nav-link" href="blogview.php">Post Blog</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Feedback.php">Patient Reviews</a>
                 </li>
                 <li class="nav-item">
-                <span class="badge text-bg-light">Welcome Mofor</span>
+                <span class="badge text-bg-light">Welcome Admin</span>
                 </li>
                 
 
@@ -276,9 +276,7 @@ $result = mysqli_query($conn, $sql);
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-cont-tab" data-bs-toggle="pill" data-bs-target="#pills-cont" type="button" role="tab" aria-controls="pills-cont" aria-selected="false">General</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-con-tab" data-bs-toggle="pill" data-bs-target="#pills-con" type="button" role="tab" aria-controls="pills-con" aria-selected="false">Con</button>
-                        </li>
+                       
                         
                         </ul>
                     <div class="tab-content" id="pills-tabContent">
@@ -850,14 +848,62 @@ $result = mysqli_query($conn, $sql);
                         <div class="blac">
                             <div class="d-flex align-items-start">
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">View Bed Spaces</button>
-                                    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">View Online/offline staff </button>
+                                    <button class="nav-link active" id="v-pills-blog-tab" data-bs-toggle="pill" data-bs-target="#v-pills-blog" type="button" role="tab" aria-controls="v-pills-blog" aria-selected="true">Manage Blog Post</button>
+                                    <button class="nav-link" id="v-pills-test-tab" data-bs-toggle="pill" data-bs-target="#v-pills-test" type="button" role="tab" aria-controls="v-pills-test" aria-selected="false">Manage Testimonial </button>
                                     <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">View Discharged patients</button>
                                     <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Staff Medical Prescriptions</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
-                                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">...</div>
-                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">...</div>
+                                    <!-- blog start -->
+                                    <div class="tab-pane fade show active" id="v-pills-blog" role="tabpanel" aria-labelledby="v-pills-blog-tab" tabindex="0">
+
+
+
+                                    </div>
+                                    <!-- blog end -->
+                                   <!-- Testimonial Start -->
+                                    <div class="tab-pane fade" id="v-pills-test" role="tabpanel" aria-labelledby="v-pills-test-tab" tabindex="0">
+                                    <div class="container">
+		<h1>Testimonials</h1>
+		<hr>
+		<?php
+    require '../connection.php';
+
+    // Query to fetch testimonials
+    $query = "SELECT * FROM patient_testimonials ORDER BY id DESC";
+    $result = mysqli_query($conn, $query);
+
+    // Loop through all testimonials
+    while ($row = mysqli_fetch_assoc($result)) {
+        $id = $row['id'];
+        $name = $row['patient_name'];
+        $title = $row['title'];
+        $message = $row['message'];
+        $date = date('F j, Y', strtotime($row['date_created']));
+
+        // Display testimonial
+        echo '<div class="card">';
+        echo '<div class="card-header">' . $name . '</div>';
+        echo '<div class="card-body">';
+        echo '<h5 class="card-title">' . $title . '</h5>';
+        echo '<p class="card-text">' . $message . '</p>';
+        echo '<p class="card-text"><small class="text-muted">' . $date . '</small></p>';
+        echo '<form method="POST" action="delete_testimonial.php">';
+        echo '<input type="hidden" name="testimonial_id" value="' . $id . '">';
+        echo '<button type="submit" class="btn btn-danger">Delete</button>';
+        echo '</form>';
+        echo '</div>';
+        echo '</div>';
+        echo '<br>';
+    }
+
+    // Close database connection
+    mysqli_close($conn);
+?>
+
+                                    </div>
+                                    <!-- Testimonial End -->
+
                                     <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">...</div>
                                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
                                 </div>
