@@ -99,6 +99,10 @@ $result = mysqli_query($conn, $sql);
                         <a class="nav-link" href="staffs.php">Staffs</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="viewblog.php">Blog</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="contactus.html">Contact Us</a>
                     </li>
                     <li class="nav-item">

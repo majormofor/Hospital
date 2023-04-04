@@ -60,6 +60,21 @@ if (mysqli_query($conn, $sql)) {
                 /* max-width: 800px; */
             }
 
+   
+    .footer {
+                background-color: black;
+                color: white;
+                text-align: center;
+                bottom: 0;
+                position: fixed; 
+                width: 100%; 
+                
+            
+            }
+
+
+
+
 </style>
 <?php
 require '../connection.php';
@@ -92,13 +107,13 @@ $row = mysqli_fetch_assoc($result);
                     <a class="nav-link " aria-current="page" href="patient.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
+                    <a class="nav-link" href="../about.html">About</a>
                 </li>
                  <li class="nav-item">
-                     <a class="nav-link" href="staffs.php">Staffs</a>
+                     <a class="nav-link" href="staffview.php">Staffs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contactus.html">Contact Us</a>
+                <a class="nav-link" href="mailto:moformajor@gmail.com">Contact Us</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Feedback.php">Patient Testimonial</a>
@@ -157,10 +172,11 @@ $row = mysqli_fetch_assoc($result);
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
-                    <img class="card-img-top" src="../assets/images/appoint2.png" alt="Card image cap" height = "150" width = "350">
+                    <img class="card-img-top" src="../assets/images/blog1.jpg" alt="Card image cap" height = "150" width = "350">
                     <div class="card-body">
-                        <h5 class="card-title">Book an Appointment</h5>
-                        <p class="card-text">Easily book an appointment with one of our medical professionals online.</p>
+                    <h5 class="card-title">Read Our Blog</h5>
+                    <p class="card-text">Get informed and stay up-to-date with the latest health news and tips from our experts at Mofor Practice. Explore our blog and discover useful insights and advice to help you lead a healthier life.</p>
+                    <a href="viewblog.php" class="btn btn-primary">Explore Our Blog</a>
                     </div>
                 </div>
             </div>
@@ -170,7 +186,7 @@ $row = mysqli_fetch_assoc($result);
                     <div class="card-body">
                        <h5 class="card-title">Write a Testimonial</h5>
                         <p class="card-text">Share your experience and help others by writing a testimonial about your care at Mofor Practice.</p>
-                        <a href="#" class="btn btn-primary">Write a Testimonial</a>
+                        <a href="../createfeedback.php" class="btn btn-primary">Write a Testimonial</a>
                         </div>
                             </div>
                         </div>
@@ -181,11 +197,13 @@ $row = mysqli_fetch_assoc($result);
                         <div class="card-body">
                         <h5 class="card-title">Testimonials</h5>
                             <p class="card-text">Hear from patients like you about their experiences at Mofor Practice Care.</p>
-                            <a href="#" class="btn btn-primary">Read Testimonials</a> </div>
+                            <a href="Feedback.php" class="btn btn-primary">Read Testimonials</a> </div>
                         </div>
                         </div>
                         </div>
                         </div>
+
+                        
 
                             </div>
                             

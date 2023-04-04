@@ -4,16 +4,16 @@ session_start();
 include('../connection.php');
 
 // Check if delete button is clicked
-if (isset($_POST['delete'])) {
+if(isset($_POST['delete'])){
 
 
     $patient_id = $_POST['patient_id'];
     // Delete patient from database
     $sql6 = "DELETE FROM patients WHERE patient_id = $patient_id";
-    mysqli_query($conn, $sql6);
+     mysqli_query($conn, $sql6);
 
 }
-if (!isset($_SESSION['staff_id'])) {
+if(!isset($_SESSION['staff_id'])) {
     header('Location: ../stafflogin.php');
     exit;
 }
@@ -41,7 +41,7 @@ $result = mysqli_query($conn, $sql);
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    
+	
     <title>Admin Page</title>
 </head>
 <body>
@@ -69,17 +69,17 @@ $result = mysqli_query($conn, $sql);
         }
 
         table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border: 1px solid black;
-        }
-        th {
-            background-color: #ddd;
-        }
+			border-collapse: collapse;
+			width: 100%;
+		}
+		th, td {
+			text-align: left;
+			padding: 8px;
+			border: 1px solid black;
+		}
+		th {
+			background-color: #ddd;
+		}
     </style>
             <img src="../assets/images/admin1.jpg" alt="background image" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
 
@@ -132,18 +132,18 @@ $result = mysqli_query($conn, $sql);
                     <div class="col-md-6">
 
                                             <?php
-                                            include('../connection.php');
+                            include('../connection.php');
 
-                                            // Count number of patients
-                                            $patients_query = "SELECT COUNT(*) AS patient_count FROM patients";
-                                            $patients_result = mysqli_query($conn, $patients_query);
-                                            $patient_count = mysqli_fetch_assoc($patients_result)['patient_count'];
+                            // Count number of patients
+                            $patients_query = "SELECT COUNT(*) AS patient_count FROM patients";
+                            $patients_result = mysqli_query($conn, $patients_query);
+                            $patient_count = mysqli_fetch_assoc($patients_result)['patient_count'];
 
-                                            // Count number of admitted patients
-                                            $admitted_query = "SELECT COUNT(*) AS admitted_count FROM admissions WHERE discharge_date IS not NULL";
-                                            $admitted_result = mysqli_query($conn, $admitted_query);
-                                            $admitted_count = mysqli_fetch_assoc($admitted_result)['admitted_count'];
-                                            ?>
+                            // Count number of admitted patients
+                            $admitted_query = "SELECT COUNT(*) AS admitted_count FROM admissions WHERE discharge_date IS not NULL";
+                            $admitted_result = mysqli_query($conn, $admitted_query);
+                            $admitted_count = mysqli_fetch_assoc($admitted_result)['admitted_count'];
+                        ?>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card text-white bg-primary mb-3">
@@ -172,24 +172,24 @@ $result = mysqli_query($conn, $sql);
                     <div class="col-md-6">
 
                                             <?php
-                                            include('../connection.php');
-                                            $online_query = "SELECT COUNT(*) as online_count FROM staffs WHERE status='Online'";
-                                            $offline_query = "SELECT COUNT(*) as offline_count FROM staffs WHERE status='Offline'";
-
-                                            $online_result = mysqli_query($conn, $online_query);
-                                            $offline_result = mysqli_query($conn, $offline_query);
-
-                                            if (mysqli_num_rows($online_result) > 0 && mysqli_num_rows($offline_result) > 0) {
-                                                $online_row = mysqli_fetch_assoc($online_result);
-                                                $offline_row = mysqli_fetch_assoc($offline_result);
-
-                                                $online_count = $online_row['online_count'];
-                                                $offline_count = $offline_row['offline_count'];
-                                            } else {
-                                                $online_count = 0;
-                                                $offline_count = 0;
-                                            }
-                                            ?>
+                            include('../connection.php');
+                            $online_query = "SELECT COUNT(*) as online_count FROM staffs WHERE status='Online'";
+                            $offline_query = "SELECT COUNT(*) as offline_count FROM staffs WHERE status='Offline'";
+                            
+                            $online_result = mysqli_query($conn, $online_query);
+                            $offline_result = mysqli_query($conn, $offline_query);
+                            
+                            if(mysqli_num_rows($online_result) > 0 && mysqli_num_rows($offline_result) > 0) {
+                                $online_row = mysqli_fetch_assoc($online_result);
+                                $offline_row = mysqli_fetch_assoc($offline_result);
+                                
+                                $online_count = $online_row['online_count'];
+                                $offline_count = $offline_row['offline_count'];
+                            } else {
+                                $online_count = 0;
+                                $offline_count = 0;
+                            }
+                        ?>
 
                             <div class="row">
                             <div class="col-md-6">
@@ -222,24 +222,24 @@ $result = mysqli_query($conn, $sql);
                     <div class="col-md-6">
 
                     <?php
-                    include('../connection.php');
-                    $online_query = "SELECT COUNT(*) as Available_bed FROM beds WHERE status='available'";
-                    $offline_query = "SELECT COUNT(*) as occupied_bed FROM beds WHERE status='occupied'";
-
-                    $online_result = mysqli_query($conn, $online_query);
-                    $offline_result = mysqli_query($conn, $offline_query);
-
-                    if (mysqli_num_rows($online_result) > 0 && mysqli_num_rows($offline_result) > 0) {
-                        $online_row = mysqli_fetch_assoc($online_result);
-                        $offline_row = mysqli_fetch_assoc($offline_result);
-
-                        $online_count = $online_row['Available_bed'];
-                        $offline_count = $offline_row['occupied_bed'];
-                    } else {
-                        $online_count = 0;
-                        $offline_count = 0;
-                    }
-                    ?>
+                            include('../connection.php');
+                            $online_query = "SELECT COUNT(*) as Available_bed FROM beds WHERE status='available'";
+                            $offline_query = "SELECT COUNT(*) as occupied_bed FROM beds WHERE status='occupied'";
+                            
+                            $online_result = mysqli_query($conn, $online_query);
+                            $offline_result = mysqli_query($conn, $offline_query);
+                            
+                            if(mysqli_num_rows($online_result) > 0 && mysqli_num_rows($offline_result) > 0) {
+                                $online_row = mysqli_fetch_assoc($online_result);
+                                $offline_row = mysqli_fetch_assoc($offline_result);
+                                
+                                $online_count = $online_row['Available_bed'];
+                                $offline_count = $offline_row['occupied_bed'];
+                            } else {
+                                $online_count = 0;
+                                $offline_count = 0;
+                            }
+                        ?>
                          <div class="row">
                             <div class="col-md-6">
                                 <div class="card text-white bg-success mb-3">
@@ -274,7 +274,7 @@ $result = mysqli_query($conn, $sql);
                 <div class="col-md-12">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">!</button>
+                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Patients</button>
@@ -291,66 +291,12 @@ $result = mysqli_query($conn, $sql);
                     <div class="tab-content" id="pills-tabContent">
                          <!-- Home details starts -->
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-                        <div class="blac">
-                            <div class="d-flex align-items-start">
-                                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                <button class="nav-link" id="v-pills-beds-tab" data-bs-toggle="pill" data-bs-target="#v-pills-beds" type="button" role="tab" aria-controls="v-pills-beds" aria-selected="false">!</button>
-
-                                    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">!</button>
-                                    <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">!</button>
-                                    <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">!</button>
-                                </div>
-                                <div class="tab-content" id="v-pills-tabContent">
-                                <!-- bed spaces start -->
-                                <div class="tab-pane fade" id="v-pills-beds" role="tabpanel" aria-labelledby="v-pills-beds-tab" tabindex="0">
-                                <div class="container mt-5">
-                                    <h2>Beds List</h2>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Bed Number</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                    include('../connection.php');
-
-                                                    $sql = "SELECT * FROM beds";
-                                                    $result = mysqli_query($conn, $sql);
-
-                                                    // Loop through each row in the result set
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        // Determine the status color based on the bed status
-                                                        $status_color = $row['status'] == 'occupied' ? 'text-danger' : 'text-success';
-                                                        // Print the bed data in the table
-                                                        echo '<tr>';
-                                                        echo '<td>' . $row['bed_number'] . '</td>';
-                                                        echo '<td class="' . $status_color . '">' . $row['status'] . '</td>';
-                                                        echo '</tr>';
-                                                    }
-                                                    ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-
-                                </div>
-                                <!-- bed spaces end -->
-
-
-                                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">..t.</div>
-                                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" tabindex="0">m...</div>
-                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">..k.</div>
-                                </div>
-                            </div>
+                       <div class="blac">
+                        
+                       </div>
 
                         </div>
-                        </div>
+                    </div>
                         
                          <!-- Home details end -->
                          <!-- Patients details starts -->
@@ -385,20 +331,20 @@ $result = mysqli_query($conn, $sql);
                                                  <?php
                                                  $sql = "SELECT * FROM patients";
                                                  $result = mysqli_query($conn, $sql);
-                                                 while ($row = mysqli_fetch_assoc($result)) { ?>
-                                                     <tr>
-                                                         <td><?php echo $row['patient_id']; ?></td>
-                                                         <td><?php echo $row['firstname'] . ' ' . $row['lastname']; ?></td>
-                                                         <td><?php echo $row['email']; ?></td>
-                                                         <td><?php echo $row['address']; ?></td>
-                                                         <td><?php echo $row['nationality']; ?></td>
-                                                         <td>
-                                                             <form method="post" action="">
-                                                                 <input type="hidden" name="patient_id" value="<?php echo $row['patient_id']; ?>">
-                                                                 <button type="submit" name="delete" class="btn btn-danger" onclick="return confirmDelete()">Delete</button>
-                                                             </form>
-                                                         </td>
-                                                     </tr>
+                                                 while($row = mysqli_fetch_assoc($result)){ ?>
+                                                 <tr>
+                                                     <td><?php echo $row['patient_id']; ?></td>
+                                                     <td><?php echo $row['firstname'].' '.$row['lastname']; ?></td>
+                                                     <td><?php echo $row['email']; ?></td>
+                                                     <td><?php echo $row['address']; ?></td>
+                                                     <td><?php echo $row['nationality']; ?></td>
+                                                     <td>
+                                                         <form method="post" action="">
+                                                             <input type="hidden" name="patient_id" value="<?php echo $row['patient_id']; ?>">
+                                                             <button type="submit" name="delete" class="btn btn-danger" onclick="return confirmDelete()">Delete</button>
+                                                         </form>
+                                                     </td>
+                                                 </tr>
                                                  <?php } ?>
                                              </tbody>
                                          </table>
@@ -410,18 +356,18 @@ $result = mysqli_query($conn, $sql);
                                     <!-- patient Medical summary start -->
                                     <div class="tab-pane fade" id="v-pills-prof" role="tabpanel" aria-labelledby="v-pills-prof-tab" tabindex="0">
                                     <h2>Medical Report Summary</h2>
-    <table>
-        <tr>
-            <th>Patient Name</th>
-            <th>Test Name</th>
-            <th>Description</th>
-            <th>Test Date</th>
-            <th>Staff Name</th>
+	<table>
+		<tr>
+			<th>Patient Name</th>
+			<th>Test Name</th>
+			<th>Description</th>
+			<th>Test Date</th>
+			<th>Staff Name</th>
             <th>Action</th>
-        </tr>
+		</tr>
         <?php
-        include('../connection.php');
-        $sql = "SELECT 
+                    include('../connection.php');
+                    $sql = "SELECT 
                     tests.test_name, 
                     tests.description, 
                     tests.test_date, 
@@ -482,31 +428,31 @@ $result = mysqli_query($conn, $sql);
                     JOIN staffs ON tests.staff_id = staffs.staff_id;
                 ";
 
-        $result = mysqli_query($conn, $sql);
+                $result = mysqli_query($conn, $sql);
 
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                            <tr>
-                                <td><?php echo $row['patient_name']; ?></td>
-                                <td><?php echo $row['test_name']; ?></td>
-                                <td><?php echo $row['description']; ?></td>
-                                <td><?php echo $row['test_date']; ?></td>
-                                <td><?php echo $row['staff_name']; ?></td>
-                            <td>
-                            <form method="post" action="delete_report.php">
-                                <input type="hidden" name="patient_id" value="<?php echo $row['patient_id']; ?>">
-                                <button type="submit" name="delete" class="btn btn-danger" onclick="return confirmDelete('<?php echo $row['patient_name']; ?>')">Delete</button>
-                            </form>
-                            </td>
-                        </tr>
-                          <?php
+                if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                    <tr>
+                        <td><?php echo $row['patient_name']; ?></td>
+                        <td><?php echo $row['test_name']; ?></td>
+                        <td><?php echo $row['description']; ?></td>
+                        <td><?php echo $row['test_date'];?></td>
+                        <td><?php echo $row['staff_name']; ?></td>
+                    <td>
+                    <form method="post" action="delete_report.php">
+                        <input type="hidden" name="patient_id" value="<?php echo $row['patient_id']; ?>">
+                        <button type="submit" name="delete" class="btn btn-danger" onclick="return confirmDelete('<?php echo $row['patient_name']; ?>')">Delete</button>
+                    </form>
+                    </td>
+                </tr>
+                  <?php
+				}
+			} else {
+				echo "<tr><td colspan='6'>No medical reports found.</td></tr>";
             }
-        } else {
-            echo "<tr><td colspan='6'>No medical reports found.</td></tr>";
-        }
-        mysqli_close($conn);
-        ?>
+					mysqli_close($conn);
+            ?>
         </table> 
         <script>
     function confirmDelete(name) {
@@ -517,7 +463,7 @@ $result = mysqli_query($conn, $sql);
 
 
 
-                           </div>
+	                       </div>
                                       <!-- patient Medical summary ends -->
                                     <!-- Admit Patient Start  -->
                                     <div class="tab-pane fade" id="v-pills-admit" role="tabpanel" aria-labelledby="v-pills-admit-tab" tabindex="0">
@@ -560,19 +506,19 @@ $result = mysqli_query($conn, $sql);
                                     
 
                                             <?php
-                                            // Include database connection file
-                                            include '../connection.php';
+                                // Include database connection file
+                                include '../connection.php';
 
 
-
-                                            // Retrieve list of admissions
-                                            $sql = "SELECT admissions.*, patients.firstname, patients.lastname, beds.bed_number, admissions.admission_date, admissions.discharge_date, admissions.admission_reason 
+                          
+                                    // Retrieve list of admissions
+                                    $sql = "SELECT admissions.*, patients.firstname, patients.lastname, beds.bed_number, admissions.admission_date, admissions.discharge_date, admissions.admission_reason 
                                     FROM admissions 
                                     INNER JOIN patients ON admissions.patient_id=patients.patient_id 
                                     INNER JOIN beds ON admissions.bed_id=beds.bed_id";
-                                            $result = $conn->query($sql);
-
-                                            ?>
+                                    $result = $conn->query($sql);
+                                    
+                                    ?>
                                     <div class="container">
                                         <h2>Admissions</h2>
                                         <table class="table">
@@ -589,25 +535,25 @@ $result = mysqli_query($conn, $sql);
                                         <tbody>
                                             <?php
                                             if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo "<tr>";
-                                                    echo "<td>" . $row["firstname"] . " " . $row["lastname"] . "</td>";
-                                                    echo "<td>" . $row["bed_number"] . "</td>";
-                                                    echo "<td>" . $row["admission_date"] . "</td>";
-                                                    echo "<td>" . $row["discharge_date"] . "</td>";
-                                                    echo "<td>" . $row["admission_reason"] . "</td>";
+                                            while($row = $result->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td>" . $row["firstname"] . " " . $row["lastname"] . "</td>";
+                                                echo "<td>" . $row["bed_number"] . "</td>";
+                                                echo "<td>" . $row["admission_date"] . "</td>";
+                                                echo "<td>" . $row["discharge_date"] . "</td>";
+                                                echo "<td>" . $row["admission_reason"] . "</td>";
 
 
-                                                    echo "<td>";
-                                                    echo "<form method='POST' action = delete_admission.php>";
-                                                    echo "<input type='hidden' name='admission_id' value='" . $row["admission_id"] . "'>";
-                                                    echo "<button type='submit' class='btn btn-danger'>Delete</button>";
-                                                    echo "</form>";
-                                                    echo "</td>";
-                                                    echo "</tr>";
-                                                }
+                                                echo "<td>";
+                                                echo "<form method='POST' action = delete_admission.php>";
+                                                echo "<input type='hidden' name='admission_id' value='" . $row["admission_id"] . "'>";
+                                                echo "<button type='submit' class='btn btn-danger'>Delete</button>";
+                                                echo "</form>";
+                                                echo "</td>";
+                                                echo "</tr>";
+                                            }
                                             } else {
-                                                echo "<tr><td colspan='3'>No admissions found.</td></tr>";
+                                            echo "<tr><td colspan='3'>No admissions found.</td></tr>";
                                             }
                                             ?>
                                         </tbody>
@@ -633,7 +579,7 @@ $result = mysqli_query($conn, $sql);
                                     <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Staff List</button>
                                     <button class="nav-link" id="v-pills-summary-tab" data-bs-toggle="pill" data-bs-target="#v-pills-summary" type="button" role="tab" aria-controls="v-pills-summary" aria-selected="false">Staff Medical Report Summary </button>
                                     <button class="nav-link" id="v-pills-registers-tab" data-bs-toggle="pill" data-bs-target="#v-pills-registers" type="button" role="tab" aria-controls="v-pills-registers" aria-selected="false">Staff Registration</button>
-                                    <button class="nav-link" id="v-pills-pre-tab" data-bs-toggle="pill" data-bs-target="#v-pills-pre" type="button" role="tab" aria-controls="v-pills-pre" aria-selected="false">Staff Medical Prescriptions</button>
+                                    <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Staff Medical Prescriptions</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
                                   <!-- staff List start -->
@@ -684,8 +630,8 @@ $result = mysqli_query($conn, $sql);
 
 
                                                   </td>';
-                                                    echo '</tr>';
-                                                }
+                                            echo '</tr>';
+                                        }
                                                 // Close the statement and database connection
                                                 $stmt->close();
                                                 $conn->close();
@@ -702,17 +648,17 @@ $result = mysqli_query($conn, $sql);
                                     <div class="container mt-5">
                                     <h2>Medical Report Summary</h2>
 <table>
-    <tr>
-        <th>Staff Name</th>
-        <th>Test Name</th>
-        <th>Description</th>
-        <th>Test Date</th>
-        <th>Patient Name</th>
-    </tr>
-    <?php
-    include('../connection.php');
-
-    $sql = "SELECT 
+	<tr>
+		<th>Staff Name</th>
+		<th>Test Name</th>
+		<th>Description</th>
+		<th>Test Date</th>
+		<th>Patient Name</th>
+	</tr>
+	<?php
+		include('../connection.php');
+		
+		$sql = "SELECT 
 					tests.test_name, 
 					tests.description, 
 					tests.test_date, 
@@ -767,25 +713,25 @@ $result = mysqli_query($conn, $sql);
 					JOIN patients ON tests.patient_id = patients.patient_id
 					JOIN staffs ON tests.staff_id = staffs.staff_id
 				";
-
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            ?>
-                        <tr>
-                            <td><?php echo $row['staff_name']; ?></td>
-                            <td><?php echo $row['test_name']; ?></td>
-                            <td><?php echo $row['description']; ?></td>
-                            <td><?php echo $row['test_date']; ?></td>
-                            <td><?php echo $row['patient_name']; ?></td>
-                        </tr>
-                        <?php
-        }
-    }
-    mysqli_close($conn);
-    ?>
-    </tbody>
+		
+		$result = mysqli_query($conn, $sql);
+		
+		if (mysqli_num_rows($result) > 0) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				?>
+				<tr>
+					<td><?php echo $row['staff_name']; ?></td>
+					<td><?php echo $row['test_name']; ?></td>
+					<td><?php echo $row['description']; ?></td>
+					<td><?php echo $row['test_date'];?></td>
+					<td><?php echo $row['patient_name']; ?></td>
+				</tr>
+				<?php
+			}
+		}
+        mysqli_close($conn);
+		?>
+	</tbody>
 </table>
         
 
@@ -842,59 +788,9 @@ $result = mysqli_query($conn, $sql);
 
                                     </div>
                                  <!-- staff registration start-->
-                                    <!-- staff medical Prescription -->
-                                    <div class="tab-pane fade" id="v-pills-pre" role="tabpanel" aria-labelledby="v-pills-pre-tab" tabindex="0">
-                                    <?php
-    // Include database connection
-    include '../connection.php';
 
-    // Query prescription data for patient ID
-    $sql = "SELECT * FROM prescription ";
-    $result = mysqli_query($conn, $sql);
-
-    // Check if there are any prescriptions for this patient
-    if (mysqli_num_rows($result) > 0) {
-        // Print prescription data in a table
-        echo '<div class="container">';
-        echo '<h1 class="text-center mb-5">Medical Prescriptions</h1>';
-        echo '<div class="table-responsive">';
-        echo '<table class="table table-striped">';
-        echo '<thead>';
-        echo '<tr><th>Prescription ID</th><th>Patient ID</th><th>Prescription Date</th><th>Medicine Name</th><th>Dosage</th><th>Frequency</th><th>Instructions</th><th>Action</th></tr>';
-        echo '</thead>';
-        echo '<tbody>';
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo "<tr>";
-            echo "<td>" . $row['prescription_id'] . "</td>";
-            echo "<td>" . $row['patient_id'] . "</td>";
-            echo "<td>" . $row['prescription_date'] . "</td>";
-            echo "<td>" . $row['medicine_name'] . "</td>";
-            echo "<td>" . $row['dosage'] . "</td>";
-            echo "<td>" . $row['frequency'] . "</td>";
-            echo "<td>" . $row['instructions'] . "</td>";
-            echo '<td><form method="GET" action="delete_prescription.php"><input type="hidden" name="prescription_id" value="'.$row['prescription_id'].'"><button type="submit" class="btn btn-danger">Delete</button></form></td>';
-            echo "</tr>";
-        }
-        echo '</tbody>';
-        echo '</table>';
-        echo '</div>';
-        echo '</div>';
-    } else {
-        echo '<div class="container">';
-        echo '<h2 class="text-center mt-5">You have no prescriptions.</h2>';
-        echo '</div>';
-    }
-
-    // Close database connection
-    mysqli_close($conn);
-?>
-
-
-                                    </div>
-                                   
+                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
                                 </div>
-                               <!-- staff medical Prescription end -->
-
                             </div>
 
                         </div>
@@ -907,13 +803,14 @@ $result = mysqli_query($conn, $sql);
                         <div class="blac">
                             <div class="d-flex align-items-start">
                                 <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                    <button class="nav-link" id="v-pills-bedso-tab" data-bs-toggle="pill" data-bs-target="#v-pills-bedso" type="button" role="tab" aria-controls="v-pillso-beds" aria-selected="true">View Bed Spaces</button>
+                                    <button class="nav-link active" id="v-pills-beds-tab" data-bs-toggle="pill" data-bs-target="#v-pills-beds" type="button" role="tab" aria-controls="v-pills-beds" aria-selected="true">View Bed Spaces</button>
                                     <button class="nav-link" id="v-pills-test-tab" data-bs-toggle="pill" data-bs-target="#v-pills-test" type="button" role="tab" aria-controls="v-pills-test" aria-selected="false">Manage Testimonial </button>
-                                    <button class="nav-link" id="v-pills-Blogo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Blogo" type="button" role="tab" aria-controls="v-pills-Blogo" aria-selected="false">Manage Blog Post</button>
+                                    <button class="nav-link" id="v-pills-Blog-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Blog" type="button" role="tab" aria-controls="v-pills-Blog" aria-selected="false">Manage Blog Post</button>
+                                    <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Staff Medical Prescriptions</button>
                                 </div>
                                 <div class="tab-content" id="v-pills-tabContent">
                                     <!-- bed space start -->
-                                    <div class="tab-pane fade show" id="v-pills-bedso" role="tabpanel" aria-labelledby="v-pills-bedso-tab" tabindex="0">
+                                    <div class="tab-pane fade show active" id="v-pills-beds" role="tabpanel" aria-labelledby="v-pills-beds-tab" tabindex="0">
                                     <div class="container mt-5">
                                     <h2>Beds List</h2>
                                     <div class="row">
@@ -927,21 +824,21 @@ $result = mysqli_query($conn, $sql);
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    include('../connection.php');
+                                                        include('../connection.php');
 
-                                                    $sql = "SELECT * FROM beds";
-                                                    $result = mysqli_query($conn, $sql);
+                                                        $sql = "SELECT * FROM beds";
+                                                        $result = mysqli_query($conn, $sql);
 
-                                                    // Loop through each row in the result set
-                                                    while ($row = mysqli_fetch_assoc($result)) {
-                                                        // Determine the status color based on the bed status
-                                                        $status_color = $row['status'] == 'occupied' ? 'text-danger' : 'text-success';
-                                                        // Print the bed data in the table
-                                                        echo '<tr>';
-                                                        echo '<td>' . $row['bed_number'] . '</td>';
-                                                        echo '<td class="' . $status_color . '">' . $row['status'] . '</td>';
-                                                        echo '</tr>';
-                                                    }
+                                                        // Loop through each row in the result set
+                                                        while ($row = mysqli_fetch_assoc($result)) {
+                                                            // Determine the status color based on the bed status
+                                                            $status_color = $row['status'] == 'occupied' ? 'text-danger' : 'text-success';
+                                                            // Print the bed data in the table
+                                                            echo '<tr>';
+                                                            echo '<td>' . $row['bed_number'] . '</td>';
+                                                            echo '<td class="' . $status_color . '">' . $row['status'] . '</td>';
+                                                            echo '</tr>';
+                                                        }
                                                     ?>
                                                 </tbody>
                                             </table>
@@ -956,99 +853,55 @@ $result = mysqli_query($conn, $sql);
                                    <!-- Testimonial Start -->
                                     <div class="tab-pane fade" id="v-pills-test" role="tabpanel" aria-labelledby="v-pills-test-tab" tabindex="0">
                                     <div class="container">
-        <h1>Testimonials</h1>
-        <hr>
-        <?php
-        require '../connection.php';
+		<h1>Testimonials</h1>
+		<hr>
+		<?php
+    require '../connection.php';
 
-        // Query to fetch testimonials
-        $query = "SELECT * FROM patient_testimonials ORDER BY id DESC";
-        $result = mysqli_query($conn, $query);
+    // Query to fetch testimonials
+    $query = "SELECT * FROM patient_testimonials ORDER BY id DESC";
+    $result = mysqli_query($conn, $query);
 
-        // Loop through all testimonials
-        while ($row = mysqli_fetch_assoc($result)) {
-            $id = $row['id'];
-            $name = $row['patient_name'];
-            $title = $row['title'];
-            $message = $row['message'];
-            $date = date('F j, Y', strtotime($row['date_created']));
+    // Loop through all testimonials
+    while ($row = mysqli_fetch_assoc($result)) {
+        $id = $row['id'];
+        $name = $row['patient_name'];
+        $title = $row['title'];
+        $message = $row['message'];
+        $date = date('F j, Y', strtotime($row['date_created']));
 
-            // Display testimonial
-            echo '<div class="card">';
-            echo '<div class="card-header">' . $name . '</div>';
-            echo '<div class="card-body">';
-            echo '<h5 class="card-title">' . $title . '</h5>';
-            echo '<p class="card-text">' . $message . '</p>';
-            echo '<p class="card-text"><small class="text-muted">' . $date . '</small></p>';
-            echo '<form method="POST" action="delete_testimonial.php">';
-            echo '<input type="hidden" name="testimonial_id" value="' . $id . '">';
-            echo '<button type="submit" class="btn btn-danger">Delete</button>';
-            echo '</form>';
-            echo '</div>';
-            echo '</div>';
-            echo '<br>';
-        }
+        // Display testimonial
+        echo '<div class="card">';
+        echo '<div class="card-header">' . $name . '</div>';
+        echo '<div class="card-body">';
+        echo '<h5 class="card-title">' . $title . '</h5>';
+        echo '<p class="card-text">' . $message . '</p>';
+        echo '<p class="card-text"><small class="text-muted">' . $date . '</small></p>';
+        echo '<form method="POST" action="delete_testimonial.php">';
+        echo '<input type="hidden" name="testimonial_id" value="' . $id . '">';
+        echo '<button type="submit" class="btn btn-danger">Delete</button>';
+        echo '</form>';
+        echo '</div>';
+        echo '</div>';
+        echo '<br>';
+    }
 
-        // Close database connection
-        mysqli_close($conn);
-        ?>
+    // Close database connection
+    mysqli_close($conn);
+?>
 
                                     </div>
                                     <!-- Testimonial End -->
-    </div>
+                                    
                                     <!-- Blog Post start -->
-                                    <div class="tab-pane fade" id="v-pills-Blogo" role="tabpanel" aria-labelledby="v-pills-Blogo-tab" tabindex="0">
-                                    <table class="table">
-                                        <h1>Blog Posts</h1>
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Title</th>
-                                                <th>Content</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            // Connect to database
-                                          
-                                            require '../connection.php';
+                                    <div class="tab-pane fade" id="v-pills-Blog" role="tabpanel" aria-labelledby="v-pills-Blog-tab" tabindex="0">
 
-                                            // Fetch posts from database
-                                            $sql = "SELECT * FROM staff_blog_posts";
-                                            $result = $conn->query($sql);
-                                            
-                                            // Loop through posts and display them in a table row
-                                            if ($result->num_rows > 0) {
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo '<tr>';
-                                                    echo '<td>' . $row['id'] . '</td>';
-                                                    echo '<td>' . $row['title'] . '</td>';
-                                                    echo '<td>' . substr($row['content'], 0, 100) . '...</td>';
-                                                    echo '<td>';
-                                                    echo '<form method="POST" action="delete_post.php">';
-                                                    echo '<input type="hidden" name="post_id" value="' . $row['id'] . '">';
-                                                    echo '<button type="submit" class="btn btn-danger">Delete</button>';
-                                                    echo '</form>';
-                                                    echo '</td>';
-                                                    echo '</tr>';
-                                                }
-                                            } else {
-                                                echo '<tr>';
-                                                echo '<td colspan="4">No posts found.</td>';
-                                                echo '</tr>';
-                                            }
-
-                                            // Close database connection
-                                            $conn->close();
-                                            ?>
-                                        </tbody>
-                                    </table>
 
 
                                     </div>
-                                     <!-- Blog Post ends -->
+                                     <!-- Blog Post start -->
 
+                                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab" tabindex="0">...</div>
                                 </div>
                             </div>
 
@@ -1056,7 +909,7 @@ $result = mysqli_query($conn, $sql);
                         </div>
                          <!-- General details Ends -->
                         
-
+                        <div class="tab-pane fade" id="pills-con" role="tabpanel" aria-labelledby="pills-con-tab" tabindex="0">tes</div>
    
                     </div>
                 </div>
@@ -1091,8 +944,8 @@ $result = mysqli_query($conn, $sql);
 
             <!-- footer starts -->
     <footer class="footer">
-            <p>Mofor Practice care &copy; 2023</p>
-      </footer>
+			<p>Mofor Practice care &copy; 2023</p>
+	  </footer>
 <!-- footer Ends -->
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
