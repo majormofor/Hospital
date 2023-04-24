@@ -2,9 +2,9 @@
 //connect to database
 require '../connection.php';
     session_start();
-    session_unset();
+    unset($_SESSION['patient_id']);
     session_destroy();
-    header('Location: ../home.html');
+    header('Location: ../home.php');
     exit;
 
     ?>
