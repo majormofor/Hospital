@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 
     // Check if passwords match
     if ($password != $confirmpassword) {
-        echo "<script> alert('Passwords do not match!');</script>";
+        echo "<script> alert('Passwords do not match! Click OK to go back and check your passwords'); history.go(-1); </script>";
         exit;
     }
 
@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
     $stmt->execute();
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
-        echo "<script> alert('Email already exists!');</script>";
+        echo "<script> alert('Email already exists! Click ok to correct it'); history.go(-1);</script>";
         exit;
     }
 
